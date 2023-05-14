@@ -1,5 +1,5 @@
 require('@nomicfoundation/hardhat-toolbox');
-require('dotenv').config()
+require("@chainlink/env-enc").config()
 
 module.exports = {
 	solidity: {
@@ -13,16 +13,10 @@ module.exports = {
 	allowUnlimitedContractSize: true,
 	networks: {
 		hardhat: {},
-		ETH_MAINNET: {
+		POLYGON_MUMBAI: {
 			accounts: [`${process.env.PRIVATE_KEY}`],
-			url: `https://eth-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`
-		},
-		ETH_GOERLI: {
-			accounts: [`${process.env.PRIVATE_KEY}`],
-			url: `https://eth-goerli.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`
+			url: `${process.env.POLYGON_MUMBAI_RPC_URL}`
 		}
-	},
-	etherscan: {
-		apiKey: `${process.env.ETHERSCAN_API_KEY}`
 	}
 }
+
