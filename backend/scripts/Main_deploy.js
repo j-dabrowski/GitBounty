@@ -5,7 +5,7 @@ async function main() {
 	const main = await Main.deploy();
 	await main.deployed();
 	
-	console.log("Main deployed to:", contract.address);
+	console.log("Main deployed to:", main.address);
 }
 
 main().catch((error) => {
