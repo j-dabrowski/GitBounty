@@ -3,7 +3,7 @@ pragma solidity ^0.8.0;
 
 contract Escrow {
 
-    uint256 favoriteNumber;
+    uint256 public favoriteNumber;
 
     struct People {
         uint256 favoriteNumber;

@@ -7,9 +7,10 @@ contract Main {
     
     Escrow[] public escrowArray;
     
-    function createEscrowContract() public {
+    function createEscrowContract() public returns(uint count) {
         Escrow escrow = new Escrow();
         escrowArray.push(escrow);
+        return escrowArray.length;
     }
 
     function sfStore(uint256 _escrowIndex, uint256 _escrowNumber) public {
@@ -20,3 +21,4 @@ contract Main {
         return escrowArray[_escrowIndex].retrieve();
     }
 }
+
