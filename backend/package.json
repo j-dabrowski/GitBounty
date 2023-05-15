@@ -1,6 +1,6 @@
 {
-	"name": "hardhat_fundme",
-	"author": "Alex G",
+	"name": "chainlinkhackathon",
+	"author": "GuindasoJoeEloi",
 	"version": "1.0.0",
 	"devDependencies": {
 	  "@chainlink/contracts": "^0.6.1",
