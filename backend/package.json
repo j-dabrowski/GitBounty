@@ -1,28 +1,45 @@
 {
-	"name": "notional",
-	"version": "0.1.0",
-	"private": true,
+	"name": "hardhat_fundme",
+	"author": "Alex G",
+	"version": "1.0.0",
+	"devDependencies": {
+	  "@chainlink/contracts": "^0.6.1",
+	  "@ethersproject/abi": "^5.4.7",
+	  "@ethersproject/providers": "^5.4.7",
+	  "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
+	  "@nomicfoundation/hardhat-toolbox": "^1.0.1",
+	  "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers",
+	  "@nomiclabs/hardhat-etherscan": "^3.1.0",
+	  "@nomiclabs/hardhat-waffle": "^2.0.5",
+	  "@openzeppelin/contracts": "^4.8.3",
+	  "@typechain/ethers-v5": "^10.1.0",
+	  "@typechain/hardhat": "^6.1.2",
+	  "chai": "^4.2.0",
+	  "dotenv": "^16.0.3",
+	  "ethers": "^5.7.1",
+	  "hardhat": "^2.14.0",
+	  "hardhat-deploy": "^0.11.26",
+	  "hardhat-gas-reporter": "^1.0.9",
+	  "solhint": "^3.3.7",
+	  "solidity-coverage": "^0.8.2",
+	  "typechain": "^8.1.0"
+	},
 	"scripts": {
-		"build": "npx hardhat compile",
-		"deploy-testnet": "npx hardhat run ./scripts/Main_deploy.js --network ETH_GOERLI",
-		"deploy": "npx hardhat run ./scripts/Main_deploy.js --network ETH_MAINNET",
-		"node": "npx hardhat node",
-		"deploy-local": "npx hardhat run ./scripts/Main_deploy.js --network localhost"
+	  "test:staging": " hardhat test --network goerli",
+	  "lint": " solhint 'contracts/*.sol'",
+	  "lint:fix": " solhint 'contracts/sol'",
+	  "coverage": " hardhat coverage"
 	},
 	"dependencies": {
-		"@chainlink/contracts": "^0.6.1",
-		"@chainlink/env-enc": "^1.0.5",
-		"@openzeppelin/contracts": "^4.8.3",
-		"@openzeppelin/contracts-upgradeable": "^4.8.3",
-		"axios": "^1.4.0",
-		"dotenv": "^16.0.3",
-		"eth-crypto": "^2.6.0",
-		"is-http-url": "^2.0.0",
-		"prompt-sync": "^4.2.0",
-		"vm2": "^3.9.17"
-	},
-	"devDependencies": {
-		"@nomicfoundation/hardhat-toolbox": "^1.0.2",
-		"hardhat": "^2.14.0"
+	  "@chainlink/env-enc": "^1.0.5",
+	  "@openzeppelin/contracts-upgradeable": "^4.8.3",
+	  "axios": "^1.4.0",
+	  "eth-crypto": "^2.6.0",
+	  "fs": "^0.0.1-security",
+	  "is-http-url": "^2.0.0",
+	  "octokit": "^2.0.14",
+	  "prompt-sync": "^4.2.0",
+	  "vm2": "^3.9.17"
 	}
-}
+  }
+  
