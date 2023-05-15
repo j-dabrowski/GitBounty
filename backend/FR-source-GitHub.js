@@ -6,7 +6,7 @@
 const url = `https://api.github.com/users/Chusynuk`;
 //*!Some how i not manage to store the token value in .env without error.
 //*! Check guys if you manage it.
-const token = "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";
+const token = "<write your Api token for GitHub>"; //.env not working
 const headers = { Authorization: `Bearer ${token}` };
 
 // construct the HTTP Request object. See: https://github.com/smartcontractkit/functions-hardhat-starter-kit#javascript-code
