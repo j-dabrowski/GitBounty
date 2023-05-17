@@ -1,11 +1,16 @@
-import Navbar from "../components/navigation/navbar"
+import { Flex } from '@chakra-ui/react'
+import Navbar from '../components/navigation/navbar'
 
 const MainLayout = ({ children }) => {
   return (
-    <div>
-      <Navbar />
-      {children}
-    </div>
+    <Flex>
+      <Flex direction="column" width="100vw">
+        <Navbar />
+        <Flex height="100vh" direction="column" alignItems="center" justifyContent="center">
+          {children}
+        </Flex>
+      </Flex>
+    </Flex>
   )
 }
 

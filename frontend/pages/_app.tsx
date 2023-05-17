@@ -1,5 +1,6 @@
 import '../styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css'
+import { Providers } from './providers'
 
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { configureChains, createClient, useAccount, WagmiConfig } from 'wagmi'
@@ -19,6 +20,7 @@ import { alchemyProvider } from 'wagmi/providers/alchemy'
 import { publicProvider } from 'wagmi/providers/public'
 import MainLayout from '../layout/mainLayout'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 const { chains, provider } = configureChains(
   [
@@ -37,7 +39,7 @@ const { chains, provider } = configureChains(
 )
 
 const { connectors } = getDefaultWallets({
-  appName: 'My Alchemy DApp',
+  appName: 'Notional',
   chains,
 })
 
@@ -56,16 +58,30 @@ const MyApp = ({ Component, pageProps }) => {
       if (!isReconnected) router.reload()
     },
   })
+
+  useEffect(() => {
+    if (account.isConnected) {
+      router.push('/owner')
+    }
+
+    router.push('/')
+  }, [account.isConnected])
+
+  console.log('account', account)
+
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider
+        coolMode
         modalSize="compact"
         initialChain={process.env.NEXT_PUBLIC_DEFAULT_CHAIN}
         chains={chains}
       >
-        <MainLayout>
-          <Component {...pageProps} />
-        </MainLayout>
+        <Providers>
+          <MainLayout>
+            <Component {...pageProps} />
+          </MainLayout>
+        </Providers>
       </RainbowKitProvider>
     </WagmiConfig>
   )

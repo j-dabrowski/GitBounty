@@ -1,14 +1,12 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit"
-import styles from "../../styles/Navbar.module.css"
+import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { Flex, Text, Heading } from '@chakra-ui/react'
 
 const Navbar = () => {
   return (
-    <nav className={styles.navbar}>
-      <a href="https://alchemy.com/?a=create-web3-dapp" target={"_blank"}>
-        <img className={styles.alchemy_logo} src="/cw3d-logo.png"></img>
-      </a>
+    <Flex justify="space-between" align="center" bgColor="gold" py="5" px="5">
+      <Heading>Notion</Heading>
       <ConnectButton></ConnectButton>
-    </nav>
+    </Flex>
   )
 }
 
