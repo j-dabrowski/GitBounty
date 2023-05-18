@@ -1,6 +1,7 @@
 import React from 'react'
 import { useAccount } from 'wagmi'
-import { Flex, Center, Text, Link } from '@chakra-ui/react'
+import { Flex, Center, Text, Button } from '@chakra-ui/react'
+import { signIn } from 'next-auth/react'
 
 const Owner = () => {
   return (
@@ -9,14 +10,20 @@ const Owner = () => {
         <Text>Choose how you want to proceed</Text>
         <Flex mt="5">
           <Center>
-            <Link bgColor="orange" borderRadius="10" p="3" _hover={{ textDecoration: 'none' }}>
+            <Button bgColor="orange" borderRadius="10" p="3" _hover={{ textDecoration: 'none' }}>
               As a Dev
-            </Link>
+            </Button>
           </Center>
           <Center ml="5">
-            <Link bgColor="lightgreen" p="3" borderRadius="10" _hover={{ textDecoration: 'none' }}>
+            <Button
+              onClick={() => signIn()}
+              bgColor="lightgreen"
+              p="3"
+              borderRadius="10"
+              _hover={{ textDecoration: 'none' }}
+            >
               As a Bounty giver
-            </Link>
+            </Button>
           </Center>
         </Flex>
       </Flex>

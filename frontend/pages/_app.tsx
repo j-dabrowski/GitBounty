@@ -1,6 +1,7 @@
 import '../styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css'
 import { Providers } from './providers'
+import { SessionProvider } from 'next-auth/react'
 
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { configureChains, createClient, useAccount, WagmiConfig } from 'wagmi'
@@ -51,7 +52,7 @@ const wagmiClient = createClient({
 
 export { WagmiConfig, RainbowKitProvider }
 
-const MyApp = ({ Component, pageProps }) => {
+const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
   const router = useRouter()
   const account = useAccount({
     onConnect({ address, connector, isReconnected }) {
@@ -70,20 +71,22 @@ const MyApp = ({ Component, pageProps }) => {
   console.log('account', account)
 
   return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider
-        coolMode
-        modalSize="compact"
-        initialChain={process.env.NEXT_PUBLIC_DEFAULT_CHAIN}
-        chains={chains}
-      >
-        <Providers>
-          <MainLayout>
-            <Component {...pageProps} />
-          </MainLayout>
-        </Providers>
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <SessionProvider session={session}>
+      <WagmiConfig client={wagmiClient}>
+        <RainbowKitProvider
+          coolMode
+          modalSize="compact"
+          initialChain={process.env.NEXT_PUBLIC_DEFAULT_CHAIN}
+          chains={chains}
+        >
+          <Providers>
+            <MainLayout>
+              <Component {...pageProps} />
+            </MainLayout>
+          </Providers>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </SessionProvider>
   )
 }
 
