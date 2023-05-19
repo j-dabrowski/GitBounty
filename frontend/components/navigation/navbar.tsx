@@ -1,13 +1,20 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit"
+
+import { ConnectButton } from "web3uikit";
+
+
 import styles from "../../styles/Navbar.module.css"
 
 const Navbar = () => {
+ 
   return (
     <nav className={styles.navbar}>
-      <a href="https://alchemy.com/?a=create-web3-dapp" target={"_blank"}>
-        <img className={styles.alchemy_logo} src="/cw3d-logo.png"></img>
+      <a href="/" >
+        <img className={styles.alchemy_logo} src="/logo-hackaton.png"></img>
       </a>
-      <ConnectButton></ConnectButton>
+      
+      
+      
+      
     </nav>
   )
 }

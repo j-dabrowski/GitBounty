@@ -3,7 +3,7 @@ import '@rainbow-me/rainbowkit/styles.css'
 
 
 import { NotificationProvider } from "web3uikit";
-import { MoralisProvider } from "react-moralis";
+
 
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { configureChains, createClient, useAccount, WagmiConfig } from 'wagmi'
@@ -60,7 +60,7 @@ const MyApp = ({ Component, pageProps }) => {
       if (!isReconnected) router.reload()
     },
   })
-  return (<MoralisProvider initializeOnMount={false}>
+  return (
     <WagmiConfig client={wagmiClient}>
       
         <MainLayout>
@@ -70,7 +70,7 @@ const MyApp = ({ Component, pageProps }) => {
         </MainLayout>
       
     </WagmiConfig>
-    </MoralisProvider>
+    
   )
 }
 

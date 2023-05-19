@@ -20,7 +20,8 @@
     "octokit": "^2.0.14",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "wagmi": "^0.12.6"
+    "wagmi": "^0.12.6",
+    "web3uikit": "^1.0.4"
   },
   "devDependencies": {
     "@chainlink/contracts": "^0.5.1",
