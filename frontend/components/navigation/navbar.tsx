@@ -1,5 +1,6 @@
 
-import { ConnectButton } from "web3uikit";
+
+import { ConnectButton } from "@rainbow-me/rainbowkit"
 
 
 import styles from "../../styles/Navbar.module.css"
@@ -12,7 +13,7 @@ const Navbar = () => {
         <img className={styles.alchemy_logo} src="/logo-hackaton.png"></img>
       </a>
       
-      
+      <ConnectButton></ConnectButton>
       
       
     </nav>
