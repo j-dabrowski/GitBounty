@@ -1,9 +1,8 @@
 import '../styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css'
 
-
-import { NotificationProvider } from "web3uikit";
-import { MoralisProvider } from "react-moralis";
+import { NotificationProvider } from 'web3uikit'
+import { MoralisProvider } from 'react-moralis'
 
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { configureChains, createClient, useAccount, WagmiConfig } from 'wagmi'
@@ -60,16 +59,15 @@ const MyApp = ({ Component, pageProps }) => {
       if (!isReconnected) router.reload()
     },
   })
-  return (<MoralisProvider initializeOnMount={false}>
-    <WagmiConfig client={wagmiClient}>
-      
+  return (
+    <MoralisProvider initializeOnMount={false}>
+      <WagmiConfig client={wagmiClient}>
         <MainLayout>
-        <NotificationProvider>
-          <Component {...pageProps} />
+          <NotificationProvider>
+            <Component {...pageProps} />
           </NotificationProvider>
         </MainLayout>
-      
-    </WagmiConfig>
+      </WagmiConfig>
     </MoralisProvider>
   )
 }
