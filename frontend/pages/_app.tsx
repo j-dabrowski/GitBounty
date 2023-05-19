@@ -1,10 +1,6 @@
 import '../styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css'
 
-
-import { NotificationProvider } from "web3uikit";
-
-
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { configureChains, createClient, useAccount, WagmiConfig } from 'wagmi'
 import {
@@ -62,15 +58,16 @@ const MyApp = ({ Component, pageProps }) => {
   })
   return (
     <WagmiConfig client={wagmiClient}>
-      
+      <RainbowKitProvider
+        modalSize="compact"
+        initialChain={process.env.NEXT_PUBLIC_DEFAULT_CHAIN}
+        chains={chains}
+      >
         <MainLayout>
-        <NotificationProvider>
           <Component {...pageProps} />
-          </NotificationProvider>
         </MainLayout>
-      
+      </RainbowKitProvider>
     </WagmiConfig>
-    
   )
 }
 
