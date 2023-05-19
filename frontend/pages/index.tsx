@@ -5,6 +5,7 @@ const Home = () => {
   return (
     <div>
       <main className={styles.main}>
+        Hola
         <InstructionsComponent></InstructionsComponent>
       </main>
     </div>
