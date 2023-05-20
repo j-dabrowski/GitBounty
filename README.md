@@ -6,11 +6,9 @@ setup secrets with env-enc:
 npx env-enc set-pw
 
 npx env-enc set
-
-  POLYGON_MUMBAI_RPC_URL
   
   PRIVATE_KEY
   
-Run deploy script:
+  POLYGON_MUMBAI_RPC_URL
 
-  npx hardhat run scripts/Main_deploy.js --network POLYGON_MUMBAI
+  POLYGONSCAN_API_KEY
