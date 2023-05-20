@@ -1,10 +1,178 @@
-
-
 .main {
-	padding: 2rem 0;
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+  padding: 2rem 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.divLinks {
+  color: white;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10%;
+}
+.links {
+  border: 2px solid white;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  margin: 10px;
+}
+.typewriter {
+  color: white;
+  font-size: 4em;
+  font-family: montserrat;
+  margin-bottom: 50px;
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  border-right: 0.15em solid #9e98fc; /* The typwriter cursor */
+  white-space: nowrap; /* Keeps the content on a single line */
+  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+  letter-spacing: 0.15em; /* Adjust as needed */
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+/* The typing effect */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: #9e98fc;
+  }
+}
+.box {
+  position: relative;
+
+  width: 300px;
+  height: 300px;
+  background-color: black;
+  border-radius: 100%; /* Use a large value for a fully rounded shape */
+  overflow: hidden;
+}
+.box::before {
+  content: '';
+  position: absolute;
+  background-image: conic-gradient(#d72a23 20deg, transparent 120deg);
+  width: 600px;
+  height: 600px;
+  top: -25%;
+  left: -25%;
+  animation: fullSpin2 10s infinite linear;
+}
+
+.box::after {
+  content: 'Repo-Owner';
+  position: absolute;
+  top: 3%;
+  left: 3%;
+  width: 94%;
+  height: 94%;
+  background-color: black;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #d72a23;
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: medium;
+  transition: transform 0.3s;
+}
+
+.box:hover::after {
+  transform: scale(1.05);
+}
+.box2 {
+  position: relative;
+
+  width: 300px;
+  height: 300px;
+  background-color: black;
+  border-radius: 100%; /* Use a large value for a fully rounded shape */
+  overflow: hidden;
+}
+.box2::before {
+  content: '';
+  position: absolute;
+  background-image: conic-gradient(#3c56be 20deg, transparent 120deg);
+  width: 600px;
+  height: 600px;
+  top: -25%;
+  left: -25%;
+  animation: fullSpin 10s infinite linear;
+}
+
+.box2::after {
+  content: 'Developer';
+  position: absolute;
+  top: 3%;
+  left: 3%;
+  width: 94%;
+  height: 94%;
+  background-color: black;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #3c56be;
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: medium;
+  transition: transform 0.3s;
+}
+
+.box2:hover::after {
+  transform: scale(1.05);
+}
+
+@keyframes fullSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes fullSpin2 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.fullSpin {
+  animation: fullSpin 5s linear infinite;
+}
+
+.fullSpin2 {
+  animation: fullSpin2 5s linear infinite;
 }

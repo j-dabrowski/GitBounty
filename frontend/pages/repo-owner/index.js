@@ -1,8 +1,9 @@
+import styles from '../../styles/Repo-owner.module.css'
 import { Form, Skeleton, Card, Button } from 'web3uikit'
 import { useState } from 'react'
 import { Fragment } from 'react'
 import useSWR from 'swr'
-import BountyModal from '../../components/BountyModal'
+import BountyModal from '../../components/bounty-modal'
 
 export default function FormForData() {
   const [formData, setFormData] = useState({ owner: '', repo: '' })
@@ -40,7 +41,7 @@ export default function FormForData() {
 
   return (
     <Fragment>
-      <div>
+      <div className={styles.main}>
         {showForm && (
           <div className="p-5">
             <Form
@@ -69,25 +70,18 @@ export default function FormForData() {
               <div className="flex flex-col justify-evenly p-5">
                 {data.filteredIssues.map((item) =>
                   item.issuesWithDetails.map((issue) => (
-                    <div className="p-5">
+                    <div className={styles.cards}>
                       <BountyModal esVisible={showModal} onClose={hideModal}></BountyModal>
                       <Card
                         key={issue.issueId}
                         title={`Title: ${issue.title}`}
                         description={issue.issueUrl}
                       >
-                        <div className="flex fle-row justify-between">
-                          <div className="italic text-sm mb-4 text-center">
-                            Issues created by {issue.name}
-                          </div>
-                          <div className=" text-xl font-bold text-center">
-                            AuthorID: #{issue.authorID}
-                          </div>
+                        <div className={styles.wrapper}>
+                          <div className={styles.cardIssuer}>Issues created by {issue.name}</div>
+                          <div className={styles.cardTitle}>AuthorID: #{issue.authorID}</div>
                           <div className="italic text-lm mb-4 text-center">
-                            <button
-                              onClick={handleClick}
-                              class="bg-lila hover:bg-lilaSuave text-white z-10 font-bold py-2 px-4 border-b-4 border-lilaSuave hover:border-lila rounded"
-                            >
+                            <button className={styles.cardButton} onClick={handleClick}>
                               Create Bounty
                             </button>
                           </div>

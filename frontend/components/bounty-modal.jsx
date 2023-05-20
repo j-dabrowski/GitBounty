@@ -1,7 +1,7 @@
 //Importamos Modal que es un popUp ya formateado de web3uikit
 import { useState } from 'react'
 import { Modal, Input, useNotification } from 'web3uikit'
-import createBounty from '../scripts/createBounty'
+import createBounty from '../scripts/create-bounty'
 import { ethers } from 'ethers'
 
 export default function UpdateListingModal({ esVisible, onClose, issueId, issueName }) {
@@ -9,7 +9,7 @@ export default function UpdateListingModal({ esVisible, onClose, issueId, issueN
   const [PriceToCreateBounty, setPriceToCreateBounty] = useState('')
 
   //Inicializamos useNitification de la libreria web3uikit
-  const dispatch = useNotification()
+ 
 
   //The signer will be the owner of the Repo and the Arbiter for the completation of the Bounty
   //With this code we get the sender/signer of the Tx
@@ -30,12 +30,7 @@ export default function UpdateListingModal({ esVisible, onClose, issueId, issueN
     await createBounty(arbiterAddress, value)
     onClose && onClose()
     setPriceToCreateBounty('0')
-    dispatch({
-      type: 'success',
-      message: 'Bounty Created Successfully',
-      title: 'Bounty Creation',
-      position: 'topR',
-    })
+    
   }
 
   return (
