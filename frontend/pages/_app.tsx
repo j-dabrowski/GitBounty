@@ -64,7 +64,7 @@ const MyApp = ({ Component, pageProps }) => {
         chains={chains}
       >
         <MainLayout>
-          <Component {...pageProps} />
+              <Component {...pageProps} />
         </MainLayout>
       </RainbowKitProvider>
     </WagmiConfig>

@@ -22,6 +22,7 @@ export default function HeroComponent(){
       rounded="20px"
     >
       <React.Fragment key=".0">
+        <div className={styles.wrapper}>
         <Typography
           color="#FFFFFF"
           variant="h3"
@@ -40,6 +41,7 @@ export default function HeroComponent(){
       height={100}
       alt="Picture of the author"
     />
+    </div>
         
         
       </React.Fragment>
