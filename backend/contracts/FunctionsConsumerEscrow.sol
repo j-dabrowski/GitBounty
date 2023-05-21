@@ -19,7 +19,7 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
     //---------------------
     address public depositor;
     address public beneficiary;
-    address public arbiter;
+    //address public arbiter;
     bool public isApproved = false;
     uint public amount;
     //-----------------------------
@@ -39,10 +39,10 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
     // https://github.com/protofire/solhint/issues/242
     // solhint-disable-next-line no-empty-blocks
     constructor(
-        address oracle,
-        address _arbiter
+        address oracle//,
+        //address _arbiter
     ) payable FunctionsClient(oracle) ConfirmedOwner(msg.sender) {
-        arbiter = _arbiter;
+        //arbiter = _arbiter;
 
         depositor = msg.sender;
         amount = msg.value;
@@ -123,7 +123,7 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
     /**
      * @notice Function of the Excrow Contract to approve the payment after PR
      *
-     */
+     
     function approve(address _beneficiary) public payable {
         require(msg.sender == arbiter, "Only arbiter can approve");
         //We implement Chainlink Functions to fetch the info of developer
@@ -136,4 +136,5 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
 
         emit Approved(amount);
     }
+    */
 }

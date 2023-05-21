@@ -4,8 +4,10 @@ async function main() {
   // for a list of supported networks and addresses.
 
   //!I have hardcoded the oracleAddress as is was not working with the Const name
-  const oracleAddress = "	0xeA6721aC65BCeD841B8ec3fc5fEdeA6141a0aDE4"; //For Mumbai.No change if used Mumbai
-  const arbiter = "<Change to Arbiter>";
+  const oracleAddress = "0xeA6721aC65BCeD841B8ec3fc5fEdeA6141a0aDE4"; //For Mumbai.No change if used Mumbai
+  
+  const [owner, otherAccount] = await ethers.getSigners();
+  const arbiter = "testArbiterName";
   const provider = new ethers.providers.JsonRpcProvider(
     "https://polygon-mumbai.g.alchemy.com/v2/WGlYvVraJOmI2Fd18AXx-lJ_mxsISz0w"
   );
@@ -26,9 +28,10 @@ async function main() {
   console.log("hey ya");
 
   const deployedContract = await consumerContract.deploy(
-    "0xeA6721aC65BCeD841B8ec3fc5fEdeA6141a0aDE4",
-    arbiter
+    //`${oracleAddress}`//, `${arbiter}`
+    "0xeA6721aC65BCeD841B8ec3fc5fEdeA6141a0aDE4"
   );
+  //const deployedContract = await consumerContract.connect(arbiter).deploy("0xeA6721aC65BCeD841B8ec3fc5fEdeA6141a0aDE4", arbiter);
 
   console.log("Deployed Functions Consumer address:", deployedContract.address);
 }
