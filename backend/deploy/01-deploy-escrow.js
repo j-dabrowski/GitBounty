@@ -15,10 +15,12 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     : VERIFICATION_BLOCK_CONFIRMATIONS;
 
   console.log("----------------------------------------------------");
-
-  const escrowFactory = await deploy("EscrowFactory", {
+  const args = ["0x4C65cED1a185Ff79313F00A9C9D3f52D0dC7c4B2"];
+  const value = ethers.utils.parseEther("0.1");
+  const escrow = await deploy("Escrow", {
     from: deployer,
-    args: [],
+    args: args,
+    value: value,
     log: true,
     waitConfirmations: waitBlockConfirmations,
     gasPrice: 8000000000, // set gas price for Polygon
@@ -27,13 +29,14 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     nonce: 0, // set nonce for transaction
     network: "matic", // use the matic network
   });
+
   if (
     !developmentChain.includes(network.name) &&
     process.env.POLYGONSCAN_API_KEY
   ) {
     log("Verifying...");
 
-    await verify(escrowFactory.address, []);
+    await verify(escrow.address, args);
   }
   console.log("----------------------------------------------------");
 };

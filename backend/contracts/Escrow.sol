@@ -2,27 +2,29 @@
 pragma solidity ^0.8.0;
 
 contract Escrow {
+    address public depositor;
+    address public beneficiary;
+    address public arbiter;
+    bool public isApproved = false;
+    uint public amount;
 
-    uint256 public favoriteNumber;
+    event Approved(uint256 balance);
 
-    struct People {
-        uint256 favoriteNumber;
-        string name;
-    }
-    People[] public people;
+    constructor(address _arbiter) payable {
+        arbiter = _arbiter;
 
-    mapping(string => uint256) public nameToFavoriteNumber;
-
-    function store(uint256 _favoriteNumber) public virtual {
-        favoriteNumber = _favoriteNumber;
-    }
-    
-    function retrieve() public view returns (uint256){
-        return favoriteNumber;
+        depositor = msg.sender;
+        amount = msg.value;
     }
 
-    function addPerson(string memory _name, uint256 _favoriteNumber) public {
-        people.push(People(_favoriteNumber, _name));
-        nameToFavoriteNumber[_name] = _favoriteNumber;
+    function approve(address _beneficiary) public payable {
+        require(msg.sender == arbiter, "Only arbiter can approve");
+
+        isApproved = true;
+        beneficiary = _beneficiary;
+        (bool sent, ) = beneficiary.call{value: amount}("");
+        require(sent, "Failed to send Ether");
+
+        emit Approved(amount);
     }
 }
