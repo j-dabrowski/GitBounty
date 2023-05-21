@@ -1,11 +1,12 @@
 import styles from '../../styles/Repo-owner.module.css'
 import { Form, Skeleton, Card, Button } from 'web3uikit'
-import { useState } from 'react'
-import { Fragment } from 'react'
+import { useSession } from 'next-auth/react'
+import { useState, Fragment } from 'react'
 import useSWR from 'swr'
 import BountyModal from '../../components/bounty-modal'
 
 export default function FormForData() {
+  const { data: session } = useSession()
   const [formData, setFormData] = useState({ owner: '', repo: '' })
   const [showForm, setShowForm] = useState(true)
   const [showModal, setShowModal] = useState(false)
@@ -14,7 +15,6 @@ export default function FormForData() {
   //Modal
   const hideModal = () => setShowModal(false)
 
-  console.log(formData.owner)
   async function fetcher(url) {
     const res = await fetch(url)
 
@@ -27,7 +27,7 @@ export default function FormForData() {
   const handleSubmit = (data) => {
     const owner = data.data[0].inputResult
 
-    setFormData({ owner: owner })
+    setFormData((prev) => ({ ...prev, owner: owner }))
     setShowForm(false)
   }
   /**
@@ -69,8 +69,8 @@ export default function FormForData() {
             {data ? (
               <div className="flex flex-col justify-evenly p-5">
                 {data.filteredIssues.map((item) =>
-                  item.issuesWithDetails.map((issue) => (
-                    <div className={styles.cards}>
+                  item.issuesWithDetails.map((issue, index) => (
+                    <div className={styles.cards} key={index}>
                       <BountyModal esVisible={showModal} onClose={hideModal}></BountyModal>
                       <Card
                         key={issue.issueId}

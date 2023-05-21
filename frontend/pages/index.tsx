@@ -1,4 +1,9 @@
+import React from 'react'
 import styles from '../styles/Home.module.css'
+import { Flex, Text } from '@chakra-ui/react'
+import { useSession } from 'next-auth/react'
+import Glitch from 'react-glitch-text'
+import { useGlitch } from 'react-powerglitch'
 
 import Link from 'next/link'
 import HeroComponent from '../components/navigation/hero'
@@ -8,6 +13,8 @@ import { useState, useEffect } from 'react'
 
 export default function Home() {
   const [isConnected, setIsConnected] = useState(false)
+  const { data: session } = useSession()
+
   const account = useAccount()
   useEffect(() => {
     setIsConnected(account.isConnected)
@@ -25,35 +32,6 @@ export default function Home() {
   }, [account.isDisconnected])
 
   //Inicializamos useNitification de la libreria web3uikit
-
-  return (
-    <div>
-      <main className={styles.main}>
-        <div className="flex justify-center">
-          {isConnected ? (
-            <div>
-              <div className={styles.wrapper}>
-                <h1 className={styles.typewriter}> You need to choose</h1>
-              </div>
-              <div className={styles.wrapper}>
-                <Image src="/pngegg (3).png" alt="" width={350} height={350} />
-              </div>
-              <div className={styles.divLinks}>
-                <div className={styles.wrapper}>
-                  <Link className={styles.box} href="/repo-owner"></Link>
-                </div>
-                <div className={styles.wrapper}>
-                  <Link className={styles.box2} href="/developer"></Link>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="w-full">
-              <HeroComponent></HeroComponent>
-            </div>
-          )}
-        </div>
-      </main>
-    </div>
-  )
+  console.log('account.isConnected', account.isConnected)
+  return <HeroComponent></HeroComponent>
 }

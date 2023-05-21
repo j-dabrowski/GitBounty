@@ -1,49 +1,36 @@
-import styles from "../../styles/Hero.module.css"
-import { Fragment } from "react";
-import React from "react";
-import { Typography } from "web3uikit";
-import {Button} from "web3uikit";
-import { Hero} from "web3uikit";
-import Image from "next/image";
+import styles from '../../styles/Hero.module.css'
+import { Flex, Text, Heading } from '@chakra-ui/react'
+import { Fragment } from 'react'
+import React from 'react'
+import { Typography } from 'web3uikit'
+import { Button } from 'web3uikit'
+import { Hero } from 'web3uikit'
+import Image from 'next/image'
 
-
-
-export default function HeroComponent(){
-
-    return(
-      <div className={styles.main}>
-      <Hero
-      align="center"
-      backgroundColor="#663cfe"
-      
-      height="400px"
-      linearGradient=""
-      padding="40px"
-      rounded="20px"
-    >
-      <React.Fragment key=".0">
-        <div className={styles.wrapper}>
-        <Typography
-          color="#FFFFFF"
-          variant="h3"
+export default function HeroComponent() {
+  return (
+    <Flex height="100vh" justifyContent="center">
+      <Flex flexDirection="column" flex={1} justifyContent="center" px={8}>
+        <Hero
+          align="center"
+          backgroundColor="#663cfe"
+          height="400px"
+          linearGradient=""
+          padding="40px"
+          rounded="20px"
         >
-          Need Help?
-        </Typography>
-        <Typography
-          color="#FFFFFF"
-          variant="h1"
-        >
-          Looking to get started?
-        </Typography>
-        <Image
-      src="/logo-hackaton.png"
-      width={100}
-      height={100}
-      alt="Picture of the author"
-    />
-    </div>
-        
-        
-      </React.Fragment>
-    </Hero></div>)
+          <Heading as="h3" color="whiteAlpha.50">
+            Need Help?
+          </Heading>
+          <Heading as="h1" color="whiteAlpha.50">
+            Looking to get started?
+          </Heading>
+          <Heading as="h1" color="whiteAlpha.50">
+            Connect your wallet to start
+          </Heading>
+          <Image src="/logo-hackaton.png" width={100} height={100} alt="Picture of the author" />
+        </Hero>
+      </Flex>
+    </Flex>
+  )
 }

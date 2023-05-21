@@ -1,22 +1,12 @@
-
-
-import { ConnectButton } from "@rainbow-me/rainbowkit"
-
-
-import styles from "../../styles/Navbar.module.css"
+import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { Flex, Heading } from '@chakra-ui/react'
 
 const Navbar = () => {
- 
   return (
-    <nav className={styles.navbar}>
-      <a href="/" >
-        <img className={styles.alchemy_logo} src="/logo-hackaton.png"></img>
-      </a>
-      
+    <Flex justifyContent="space-between" align="center" bgColor="yellow" px={5} minHeight="100px">
+      <Heading as="h3">NOTIONAL</Heading>
       <ConnectButton></ConnectButton>
-      
-      
-    </nav>
+    </Flex>
   )
 }
 

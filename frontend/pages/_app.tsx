@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import '../styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css'
 
@@ -53,27 +54,24 @@ const wagmiClient = createClient({
 
 export { WagmiConfig, RainbowKitProvider }
 
-const MyApp = ({ Component, pageprops: { session, ...pageProps } }) => {
+const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
   const router = useRouter()
   const account = useAccount({
     onConnect({ address, connector, isReconnected }) {
       if (!isReconnected) router.reload()
     },
   })
-  console.log('session', session)
+
+  useEffect(() => {
+    if (account.isConnected) {
+      router.push('/owner')
+    }
+
+    router.push('/')
+  }, [account.isConnected])
+
   return (
     <WagmiConfig client={wagmiClient}>
-<<<<<<< HEAD
-      <RainbowKitProvider
-        modalSize="compact"
-        initialChain={process.env.NEXT_PUBLIC_DEFAULT_CHAIN}
-        chains={chains}
-      >
-        <MainLayout>
-              <Component {...pageProps} />
-        </MainLayout>
-      </RainbowKitProvider>
-=======
       <SessionProvider session={session}>
         <RainbowKitSiweNextAuthProvider>
           <RainbowKitProvider
@@ -89,7 +87,6 @@ const MyApp = ({ Component, pageprops: { session, ...pageProps } }) => {
           </RainbowKitProvider>
         </RainbowKitSiweNextAuthProvider>
       </SessionProvider>
->>>>>>> 67c78ad (clean up)
     </WagmiConfig>
   )
 }
