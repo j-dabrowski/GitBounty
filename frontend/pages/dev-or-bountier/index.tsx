@@ -1,13 +1,14 @@
 import React from 'react'
 import { Flex, Text } from '@chakra-ui/react'
 import { useSession, signIn } from 'next-auth/react'
+import BountyModal from '../../components/bounty-modal'
 
 import { useGlitch } from 'react-powerglitch'
 import Link from 'next/link'
 import Image from 'next/image'
 
 const Owner = () => {
-  // const session = useSession()
+  const { data: session, status } = useSession()
   const glitchDev = useGlitch({
     playMode: 'always',
     createContainers: true,
@@ -63,6 +64,7 @@ const Owner = () => {
 
   return (
     <Flex flexDirection="column" bgColor="black">
+      {status === 'authenticated' && <BountyModal />}
       <Flex height="100vh" flexDirection="column" justifyContent="space-evenly">
         <Flex justifyContent="center">
           <Image src="/pngegg (3).png" alt="" width={350} height={350} />
