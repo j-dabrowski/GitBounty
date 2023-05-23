@@ -76,7 +76,7 @@ const Owner = () => {
             </Link>
           </Flex>
           <Flex>
-            <Link onClick={() => signIn()} href="/repo-owner" ref={glitchBountier.ref}>
+            <Link  href="/repo-owner" ref={glitchBountier.ref}>
               <Text color="blue" fontSize={36} fontWeight="semibold">
                 BOUNTIER
               </Text>

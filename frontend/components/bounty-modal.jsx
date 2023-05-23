@@ -4,7 +4,7 @@ import { Modal, Input, useNotification } from 'web3uikit'
 import createBounty from '../scripts/create-bounty'
 import { ethers } from 'ethers'
 
-export default function UpdateListingModal({ esVisible, onClose, issueId, issueName }) {
+export default function UpdateListingModal({ esVisible, onClose}) {
   //Creamos un useState para linkear lo que escribamos en modal aqui
   const [PriceToCreateBounty, setPriceToCreateBounty] = useState('')
 

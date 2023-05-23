@@ -1,13 +1,14 @@
 import styles from '../../styles/Repo-owner.module.css'
 import { Form, Skeleton, Card, Button } from 'web3uikit'
-import { useSession } from 'next-auth/react'
-import { useState, Fragment } from 'react'
+
+import { useState, Fragment, useEffect } from 'react'
 import useSWR from 'swr'
 import BountyModal from '../../components/bounty-modal'
+import { useSession, signIn ,  signOut } from 'next-auth/react'
 
-export default function FormForData() {
-  const { data: session } = useSession()
-  const [formData, setFormData] = useState({ owner: '', repo: '' })
+export default function RepoOwner() {
+  //const { data: session } = useSession()
+  const [formData, setFormData] = useState({ owner: ''})
   const [showForm, setShowForm] = useState(true)
   const [showModal, setShowModal] = useState(false)
 
@@ -37,7 +38,12 @@ export default function FormForData() {
     setShowModal(true)
   }
 
-  async function CreateEscrowContract() {}
+  //async function CreateEscrowContract() {}
+
+  /*useEffect(() => {
+    // This code will be executed when the component mounts
+    signIn()
+  }, [])*/
 
   return (
     <Fragment>

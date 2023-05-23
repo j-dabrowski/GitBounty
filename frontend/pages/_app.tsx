@@ -5,6 +5,8 @@ import '@rainbow-me/rainbowkit/styles.css'
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { SessionProvider } from 'next-auth/react'
 import { Providers } from './providers'
+//------------------------------------
+
 
 import { configureChains, createClient, useAccount, WagmiConfig } from 'wagmi'
 import {
@@ -79,7 +81,9 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
         >
           <Providers>
             <MainLayout>
+              
               <Component {...pageProps} />
+              
             </MainLayout>
           </Providers>
         </RainbowKitProvider>
