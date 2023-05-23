@@ -1,14 +1,20 @@
 import React from 'react'
 import { Flex, Text } from '@chakra-ui/react'
 import { useSession, signIn } from 'next-auth/react'
-import BountyModal from '../../components/bounty-modal'
-
 import { useGlitch } from 'react-powerglitch'
+import useSWR from 'swr'
 import Link from 'next/link'
 import Image from 'next/image'
 
+import GithubUser from '../../components/github-user'
+import requestReposIssues from '../api/issues'
+
+import { eventNames } from 'process'
+
 const Owner = () => {
   const { data: session, status } = useSession()
+  const [gitHubUser, setGitHubUser] = React.useState('')
+
   const glitchDev = useGlitch({
     playMode: 'always',
     createContainers: true,
@@ -62,9 +68,20 @@ const Owner = () => {
     pulse: false,
   })
 
+  const handleGitHubUserName = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+    setGitHubUser(value)
+  }
+  async function fetcher(url) {
+    const res = await fetch(url)
+
+    return res.json()
+  }
+
+  const { data } = useSWR(`/api/issues?owner=${gitHubUser}`, fetcher)
+  console.log('data', data)
   return (
     <Flex flexDirection="column" bgColor="black">
-      {status === 'authenticated' && <BountyModal />}
+      {status === 'authenticated' && <GithubUser handleGitHubUserName={handleGitHubUserName} />}
       <Flex height="100vh" flexDirection="column" justifyContent="space-evenly">
         <Flex justifyContent="center">
           <Image src="/pngegg (3).png" alt="" width={350} height={350} />
@@ -73,7 +90,7 @@ const Owner = () => {
           <Flex>
             <Link onClick={() => signIn()} href="/" ref={glitchDev.ref}>
               <Text color="red" fontSize={36} fontWeight="bold">
-                DEVELOPER
+                DEVELOPER {gitHubUser}
               </Text>
             </Link>
           </Flex>

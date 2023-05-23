@@ -7,7 +7,7 @@ export default NextAuth({
       clientId: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
       async profile(profile: GithubProfile) {
-        // console.log('profile', profile)
+        console.log('profile', profile)
         return {
           id: profile.id.toString(),
           name: profile.name,

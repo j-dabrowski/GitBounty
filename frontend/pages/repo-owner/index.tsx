@@ -18,11 +18,15 @@ export default function FormForData() {
 
     return res.json()
   }
-  const { data } = useSWR(formData.owner ? `/api/issues?owner=Chusynuk` : null, fetcher)
 
   // console.log('requestReposIssues(', requestReposIssues())
+  const { data } = useSWR(`/api/issues?owner=Chusynuk`, fetcher)
+  // const { data } = useSWR(formData.owner ? `/api/issues?owner=${formData.owner}` : null, fetcher)
+
+  console.log('data', data)
 
   const handleSubmit = (data) => {
+    // event.preventDefault()
     const owner = data.data[0].inputResult
 
     setFormData((prev) => ({ ...prev, owner }))
@@ -32,8 +36,6 @@ export default function FormForData() {
   const handleClick = () => {
     setShowModal(true)
   }
-
-  async function CreateEscrowContract() {}
 
   return (
     <Fragment>
