@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import {
   Modal,
   ModalOverlay,
@@ -14,6 +14,7 @@ import {
 
 function GithubUser({ handleGitHubUserName }) {
   const { isOpen, onOpen, onClose } = useDisclosure({ defaultIsOpen: true })
+  const [userName, setUserName] = useState('')
 
   return (
     <>
@@ -23,10 +24,17 @@ function GithubUser({ handleGitHubUserName }) {
           <ModalHeader>Github username</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Input onChange={handleGitHubUserName} />
+            <Input onChange={(e) => setUserName(e.target.value)} />
           </ModalBody>
           <ModalFooter>
-            <Button onClick={onClose} colorScheme="blue" mr={3}>
+            <Button
+              onClick={() => {
+                handleGitHubUserName(userName)
+                onClose()
+              }}
+              colorScheme="blue"
+              mr={3}
+            >
               Save
             </Button>
             <Button colorScheme="blue" mr={3} onClick={onClose}>

@@ -68,7 +68,7 @@ const Owner = () => {
     pulse: false,
   })
 
-  const handleGitHubUserName = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+  const handleGitHubUserName = (value) => {
     setGitHubUser(value)
   }
   async function fetcher(url) {
@@ -76,9 +76,10 @@ const Owner = () => {
 
     return res.json()
   }
+  //api.github.com/repos/anandkgpt03/test/issues
 
   const { data } = useSWR(`/api/issues?owner=${gitHubUser}`, fetcher)
-  console.log('data', data)
+  console.log('gitHubUser', gitHubUser)
   return (
     <Flex flexDirection="column" bgColor="black">
       {status === 'authenticated' && <GithubUser handleGitHubUserName={handleGitHubUserName} />}
