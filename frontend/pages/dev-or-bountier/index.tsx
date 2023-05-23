@@ -1,20 +1,21 @@
 import React from 'react'
 import { Flex, Text } from '@chakra-ui/react'
 import { useSession, signIn } from 'next-auth/react'
+import { getServerSession } from 'next-auth'
 import { useGlitch } from 'react-powerglitch'
-import useSWR from 'swr'
 import Link from 'next/link'
 import Image from 'next/image'
+import { GithubUserContext } from '../../context/Provider'
 
 import GithubUser from '../../components/github-user'
-import requestReposIssues from '../api/issues'
-
-import { eventNames } from 'process'
+import { requestReposIssues } from '../api/issues'
 
 const Owner = () => {
-  const { data: session, status } = useSession()
+  const session = await getServerSession()
+  const { data, status } = useSession()
   const [gitHubUser, setGitHubUser] = React.useState('')
-
+  const [githubUserRepos, setGithubUserRepos] = React.useState()
+  const { userRepoIssues, setUserRepoIssues } = React.useContext(GithubUserContext)
   const glitchDev = useGlitch({
     playMode: 'always',
     createContainers: true,
@@ -68,18 +69,16 @@ const Owner = () => {
     pulse: false,
   })
 
-  const handleGitHubUserName = (value) => {
+  const handleGitHubUserName = async (value) => {
+    const requestResponse = await requestReposIssues(value)
+    setGithubUserRepos(requestResponse)
     setGitHubUser(value)
   }
-  async function fetcher(url) {
-    const res = await fetch(url)
 
-    return res.json()
-  }
-  //api.github.com/repos/anandkgpt03/test/issues
-
-  const { data } = useSWR(`/api/issues?owner=${gitHubUser}`, fetcher)
-  console.log('gitHubUser', gitHubUser)
+  console.log('userRepoIssues', userRepoIssues)
+  console.log('session', session)
+  const userReposWithIssues = githubUserRepos?.filter((repo) => repo.has_issues)
+  setUserRepoIssues(userReposWithIssues)
   return (
     <Flex flexDirection="column" bgColor="black">
       {status === 'authenticated' && <GithubUser handleGitHubUserName={handleGitHubUserName} />}
