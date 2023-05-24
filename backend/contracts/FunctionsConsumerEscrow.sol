@@ -5,6 +5,8 @@ import {Functions, FunctionsClient} from "./dev/functions/FunctionsClient.sol";
 // import "@chainlink/contracts/src/v0.8/dev/functions/FunctionsClient.sol"; // Once published
 import {ConfirmedOwner} from "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 
+import "./Main.sol"; 
+
 /**
  * @title Functions Consumer contract
  * @notice This contract is a demonstration of using Functions.
@@ -19,7 +21,8 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
     //---------------------
     address public depositor;
     address public beneficiary;
-    //address public arbiter;
+    address public arbiter;
+    address public mainAddress;
     bool public isApproved = false;
     uint public amount;
     //-----------------------------
@@ -39,15 +42,21 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
     // https://github.com/protofire/solhint/issues/242
     // solhint-disable-next-line no-empty-blocks
     constructor(
-        address oracle//,
-        //address _arbiter
+        address oracle,
+        address _arbiter,
+        address _mainAddress
     ) payable FunctionsClient(oracle) ConfirmedOwner(msg.sender) {
-        //arbiter = _arbiter;
-
+        arbiter = _arbiter;
+        mainAddress = _mainAddress;
         depositor = msg.sender;
         amount = msg.value;
     }
 
+    modifier onlyEscrow {
+        Main main = Main(mainAddress);
+        require(main.isEscrow(msg.sender));
+        _;
+    }
     /**
      * @notice Send a simple request
      *
@@ -64,7 +73,7 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
         string[] calldata args,
         uint64 subscriptionId,
         uint32 gasLimit
-    ) public onlyOwner returns (bytes32) {
+    ) public onlyEscrow returns (bytes32) {
         Functions.Request memory req;
         req.initializeRequest(
             Functions.Location.Inline,

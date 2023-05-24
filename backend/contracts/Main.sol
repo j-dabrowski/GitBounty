@@ -17,6 +17,7 @@ contract Main {
         string loginName;
     }
 
+    mapping(address => bool) public EscrowExists;
     //Array of all the Escrow Structs
     Escrow_info[] public Escrows;
     //Array of all the Developer Structs
@@ -65,6 +66,8 @@ contract Main {
             Escrow_info(address(newEscrow), _ownerUserName, _issueId)
         );
 
+        EscrowExists[address(newEscrow)] = true;
+
         emit EscrowCreated(
             address(newEscrow),
             _arbiter,
@@ -73,6 +76,37 @@ contract Main {
             _ownerUserName,
             _issueId
         );
+    }
+
+    function createEscrowPreset() public payable { // TESTING PURPOSES ONLY, REMOVE FOR PROD
+        Escrow newEscrow = new Escrow{
+            value: msg.value
+        }(address(0xa92370Db81cD337d1d1b7B07DA2839c2Fbf88d09));
+        Escrows.push(
+            Escrow_info(address(newEscrow), "testName", 777)
+        );
+
+        EscrowExists[address(newEscrow)] = true;
+
+        emit EscrowCreated(
+            address(newEscrow),
+            0xa92370Db81cD337d1d1b7B07DA2839c2Fbf88d09,
+            msg.sender,
+            msg.value,
+            "testName",
+            777
+        );
+    }
+
+    function isEscrow(address _contractAddress) public view returns (bool) {
+        return EscrowExists[_contractAddress];
+    }
+
+    function EscrowsIsEmpty() public view returns (bool) { // TESTING PURPOSES ONLY, REMOVE FOR PROD
+        if(Escrows.length == 0) {
+            return true;
+        }
+        return false;
     }
 
     function getEscrows() public view returns (Escrow_info[] memory) {
