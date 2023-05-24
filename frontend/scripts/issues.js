@@ -11,8 +11,8 @@ const requestReposIssues = async (owner) => {
   return response
 }
 
-const requestIssues = (owner) => {
-  fetch(`https://api.github.com/users/${owner}/repos`, {
+const requestIssues = (owner, repo) => {
+  fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
     headers: {
       Accept: 'application/vnd.github.v3+json',
       Authorization: `token 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`,

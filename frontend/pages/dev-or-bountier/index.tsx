@@ -8,13 +8,12 @@ import Image from 'next/image'
 import { GithubUserContext } from '../../context/Provider'
 
 import GithubUser from '../../components/github-user'
-import { requestReposIssues } from '../api/issues'
+import { requestReposIssues } from '../../scripts/issues'
 
 const Owner = () => {
-  const session = await getServerSession()
   const { data, status } = useSession()
   const [gitHubUser, setGitHubUser] = React.useState('')
-  const [githubUserRepos, setGithubUserRepos] = React.useState()
+
   const { userRepoIssues, setUserRepoIssues } = React.useContext(GithubUserContext)
   const glitchDev = useGlitch({
     playMode: 'always',
@@ -70,15 +69,19 @@ const Owner = () => {
   })
 
   const handleGitHubUserName = async (value) => {
-    const requestResponse = await requestReposIssues(value)
-    setGithubUserRepos(requestResponse)
-    setGitHubUser(value)
+    // const requestResponse = await requestReposIssues(value)
+    // setGithubUserRepos(requestResponse)
+    // setGitHubUser(value)
+
+    const response = await fetch(`/api/dev-or-bountier?owner=${value}`)
+    const mine = await response.json()
+    console.log('response', mine)
   }
 
-  console.log('userRepoIssues', userRepoIssues)
-  console.log('session', session)
-  const userReposWithIssues = githubUserRepos?.filter((repo) => repo.has_issues)
-  setUserRepoIssues(userReposWithIssues)
+  // console.log('userRepoIssues', userRepoIssues)
+
+  // const userReposWithIssues = githubUserRepos?.filter((repo) => repo.has_issues)
+  // setUserRepoIssues(userReposWithIssues)
   return (
     <Flex flexDirection="column" bgColor="black">
       {status === 'authenticated' && <GithubUser handleGitHubUserName={handleGitHubUserName} />}

@@ -1,5 +1,3 @@
-'use client'
-
 import { useEffect } from 'react'
 import '../styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css'
@@ -63,13 +61,13 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
     },
   })
 
-  useEffect(() => {
-    if (account.isConnected) {
-      router.push('/dev-or-bountier')
-    } else {
-      router.push('/')
-    }
-  }, [account.isConnected])
+  // useEffect(() => {
+  //   if (account.isConnected) {
+  //     router.push('/dev-or-bountier')
+  //   } else {
+  //     router.push('/')
+  //   }
+  // }, [account.isConnected])
 
   return (
     <WagmiConfig client={wagmiClient}>
