@@ -60,7 +60,7 @@ const MyApp = ({ Component, pageProps: { session, ...pageProps } }) => {
       if (!isReconnected) router.reload()
     },
   })
-
+  console.log('{...pageProps}', { ...pageProps })
   // useEffect(() => {
   //   if (account.isConnected) {
   //     router.push('/dev-or-bountier')

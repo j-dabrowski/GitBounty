@@ -1,8 +1,10 @@
+import { NextApiRequest, NextApiResponse } from 'next'
 import { requestIssues } from '../../scripts/issues'
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { owner, repo } = req.query
-  const repos = await requestIssues(owner, repo)
-  //   const reposWithIssues = repos.filter((repoWithIssues) => repoWithIssues.has_issues)
-  res.status(200).json({ repos })
+  const issues = await requestIssues(owner, repo)
+  console.log('issues', issues)
+
+  res.status(200).json({ issues })
 }

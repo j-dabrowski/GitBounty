@@ -11,17 +11,17 @@ const requestReposIssues = async (owner) => {
   return response
 }
 
-const requestIssues = (owner, repo) => {
-  fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
+const requestIssues = async (owner, repo) => {
+  const request = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
     headers: {
       Accept: 'application/vnd.github.v3+json',
       Authorization: `token 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`,
     },
   })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log(data)
-    })
+
+  const response = await request.json()
+
+  return response
 }
 
 export { requestReposIssues, requestIssues }
