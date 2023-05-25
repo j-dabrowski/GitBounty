@@ -40,9 +40,13 @@ contract Main {
     //Event fired when a new Developer signIn
     event NewDeveloper(address indexed developer, string loginName);
 
-    constructor() {
+    constructor(address escrowContractAddress) {
         // Initialize the Escrow contract
-        escrowInitialized = new Escrow(msg.sender);
+        escrowInitialized = Escrow(escrowContractAddress);
+    }
+
+    function setEscrowAddress(address escrowContractAddress) internal {
+        escrowInitialized = Escrow(escrowContractAddress);
     }
 
     /**
@@ -84,6 +88,7 @@ contract Main {
     function deleteEscrowArray(
         address escrowContractAddress
     ) external returns (uint256) {
+        setEscrowAddress(escrowContractAddress);
         uint256 arrayLength = Escrows.length;
 
         if (arrayLength == 0) {
