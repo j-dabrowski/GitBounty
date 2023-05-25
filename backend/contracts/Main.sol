@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./Escrow.sol"; 
+import "./Escrow.sol";
 
 contract Main {
+    //Initalize Escrow Contract
+    Escrow public escrowInitialized;
     //Structs for each new EscrowContract
     struct Escrow_info {
         address escrowContract;
@@ -17,11 +19,12 @@ contract Main {
         string loginName;
     }
 
-    mapping(address => bool) public EscrowExists;
     //Array of all the Escrow Structs
     Escrow_info[] public Escrows;
     //Array of all the Developer Structs
     Developer_info[] public Developers;
+
+    //ERRORS
 
     //Event fired when a new Escrow/bounty is created
     event EscrowCreated(
@@ -32,9 +35,15 @@ contract Main {
         string ownerUserName,
         uint256 issueId
     );
+    event EscrowClosed(address indexed escrowContractAddress, uint256 issueId);
 
     //Event fired when a new Developer signIn
     event NewDeveloper(address indexed developer, string loginName);
+
+    constructor() {
+        // Initialize the Escrow contract
+        escrowInitialized = new Escrow(msg.sender);
+    }
 
     /**
      *
@@ -58,15 +67,9 @@ contract Main {
         string memory _ownerUserName,
         uint256 _issueId
     ) public payable {
-        Escrow newEscrow = new Escrow{
-            value: msg.value
-        }(_arbiter);
+        Escrow newEscrow = new Escrow{value: msg.value}(_arbiter);
 
-        Escrows.push(
-            Escrow_info(address(newEscrow), _ownerUserName, _issueId)
-        );
-
-        EscrowExists[address(newEscrow)] = true;
+        Escrows.push(Escrow_info(address(newEscrow), _ownerUserName, _issueId));
 
         emit EscrowCreated(
             address(newEscrow),
@@ -78,35 +81,27 @@ contract Main {
         );
     }
 
-    function createEscrowPreset() public payable { // TESTING PURPOSES ONLY, REMOVE FOR PROD
-        Escrow newEscrow = new Escrow{
-            value: msg.value
-        }(address(0xa92370Db81cD337d1d1b7B07DA2839c2Fbf88d09));
-        Escrows.push(
-            Escrow_info(address(newEscrow), "testName", 777)
-        );
+    function deleteEscrowArray(
+        address escrowContractAddress
+    ) external returns (uint256) {
+        uint256 arrayLength = Escrows.length;
 
-        EscrowExists[address(newEscrow)] = true;
-
-        emit EscrowCreated(
-            address(newEscrow),
-            0xa92370Db81cD337d1d1b7B07DA2839c2Fbf88d09,
-            msg.sender,
-            msg.value,
-            "testName",
-            777
-        );
-    }
-
-    function isEscrow(address _contractAddress) public view returns (bool) {
-        return EscrowExists[_contractAddress];
-    }
-
-    function EscrowsIsEmpty() public view returns (bool) { // TESTING PURPOSES ONLY, REMOVE FOR PROD
-        if(Escrows.length == 0) {
-            return true;
+        if (arrayLength == 0) {
+            revert("No escrows found");
         }
-        return false;
+        for (uint256 i = 0; i < arrayLength; i++) {
+            if (Escrows[i].escrowContract == escrowContractAddress) {
+                if (i < arrayLength - 1) {
+                    Escrows[i] = Escrows[arrayLength - 1];
+                }
+                emit EscrowClosed(escrowContractAddress, Escrows[i].issueId);
+                Escrows.pop();
+
+                escrowInitialized.cancelEscrow(msg.sender);
+                return i;
+            }
+        }
+        revert("Escrow contract not found");
     }
 
     function getEscrows() public view returns (Escrow_info[] memory) {
