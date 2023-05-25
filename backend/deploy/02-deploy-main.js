@@ -15,10 +15,10 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     : VERIFICATION_BLOCK_CONFIRMATIONS;
 
   console.log("----------------------------------------------------");
-
+  const args = ["0x4e2e475b304Db80adbc9098BFC6bf867dEc95ABA"];
   const main = await deploy("Main", {
     from: deployer,
-    args: [],
+    args: args,
     log: true,
     waitConfirmations: waitBlockConfirmations,
     gasPrice: 8000000000, // set gas price for Polygon
@@ -33,7 +33,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   ) {
     log("Verifying...");
 
-    await verify(main.address, []);
+    await verify(main.address, args);
   }
   console.log("----------------------------------------------------");
 };
