@@ -8,7 +8,8 @@ contract Main {
     struct Escrow_info {
         address escrowContract;
         string ownerUserName;
-        uint256 issueId;
+        string issueId;
+        string repo;
     }
 
     //Struct for each new Developer who wants to use our Service
@@ -23,6 +24,8 @@ contract Main {
     //Array of all the Developer Structs
     Developer_info[] public Developers;
 
+    address consumerAddress;
+
     //Event fired when a new Escrow/bounty is created
     event EscrowCreated(
         address indexed escrowContract,
@@ -30,7 +33,8 @@ contract Main {
         address indexed depositor,
         uint256 amount,
         string ownerUserName,
-        uint256 issueId
+        string issueId,
+        string repo
     );
 
     //Event fired when a new Developer signIn
@@ -56,14 +60,15 @@ contract Main {
     function createEscrow(
         address _arbiter,
         string memory _ownerUserName,
-        uint256 _issueId
+        string memory _issueId,
+        string memory _repo
     ) public payable {
         Escrow newEscrow = new Escrow{
             value: msg.value
-        }(_arbiter);
+        }(_arbiter, consumerAddress, _issueId, _repo);
 
         Escrows.push(
-            Escrow_info(address(newEscrow), _ownerUserName, _issueId)
+            Escrow_info(address(newEscrow), _ownerUserName, _issueId, _repo)
         );
 
         EscrowExists[address(newEscrow)] = true;
@@ -74,16 +79,17 @@ contract Main {
             msg.sender,
             msg.value,
             _ownerUserName,
-            _issueId
+            _issueId,
+            _repo
         );
     }
 
     function createEscrowPreset() public payable { // TESTING PURPOSES ONLY, REMOVE FOR PROD
         Escrow newEscrow = new Escrow{
             value: msg.value
-        }(address(0xa92370Db81cD337d1d1b7B07DA2839c2Fbf88d09));
+        }(address(0xa92370Db81cD337d1d1b7B07DA2839c2Fbf88d09), consumerAddress, "777", "notional");
         Escrows.push(
-            Escrow_info(address(newEscrow), "testName", 777)
+            Escrow_info(address(newEscrow), "testName", "777", "notional")
         );
 
         EscrowExists[address(newEscrow)] = true;
@@ -94,8 +100,13 @@ contract Main {
             msg.sender,
             msg.value,
             "testName",
-            777
+            "777",
+            "notional"
         );
+    }
+
+    function setConsumerAddress(address _consumerAddress) public {
+        consumerAddress = _consumerAddress;
     }
 
     function isEscrow(address _contractAddress) public view returns (bool) {

@@ -18,15 +18,26 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
     bytes32 public latestRequestId;
     bytes public latestResponse;
     bytes public latestError;
-    //---------------------
+    //-----------------------------
     address public depositor;
     address public beneficiary;
-    address public arbiter;
-    address public mainAddress;
+    //-----------------------------
+    Main main;
+    string source_store;
+    bytes secrets_store;
+    uint64 subscriptionId_store;
+    uint32 gasLimit_store;
+    //-----------------------------
     bool public isApproved = false;
     uint public amount;
     //-----------------------------
     string public latestName;
+
+    struct taskInfo {
+        bool status;
+        string author;
+    }
+    taskInfo[] public results;
 
     event OCRResponse(bytes32 indexed requestId, bytes result, bytes err);
     //-------------------------------------
@@ -43,17 +54,16 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
     // solhint-disable-next-line no-empty-blocks
     constructor(
         address oracle,
-        address _arbiter,
-        address _mainAddress
+        address _mainAddress,
+        string memory _source
     ) payable FunctionsClient(oracle) ConfirmedOwner(msg.sender) {
-        arbiter = _arbiter;
-        mainAddress = _mainAddress;
+        main = Main(_mainAddress);
+        source_store = _source;
         depositor = msg.sender;
         amount = msg.value;
     }
 
     modifier onlyEscrow {
-        Main main = Main(mainAddress);
         require(main.isEscrow(msg.sender));
         _;
     }
@@ -68,12 +78,12 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
      * @return Functions request ID
      */
     function executeRequest(
-        string calldata source,
-        bytes calldata secrets,
-        string[] calldata args,
+        string memory source,
+        bytes memory secrets,
+        string[] memory args,
         uint64 subscriptionId,
         uint32 gasLimit
-    ) public onlyEscrow returns (bytes32) {
+    ) public onlyOwner returns (bytes32) {
         Functions.Request memory req;
         req.initializeRequest(
             Functions.Location.Inline,
@@ -106,6 +116,9 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
         latestResponse = response;
         latestError = err;
         //----------------------
+        //bool approved = functionResult.status; 
+        //string author = functionResult.author; 
+        //results(19) = taskInfo(approved, author)
         latestName = string(abi.encodePacked(response));
 
         emit OCRResponse(requestId, response, err);
@@ -127,6 +140,16 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
         bytes32 requestId
     ) public onlyOwner {
         addExternalRequest(oracleAddress, requestId);
+    }
+
+    function executeRequestFromEscrow(string[] calldata args) public onlyEscrow returns (bytes32) {
+        return executeRequest(
+            source_store,
+            secrets_store,
+            args,
+            subscriptionId_store,
+            gasLimit_store
+        );
     }
 
     /**
