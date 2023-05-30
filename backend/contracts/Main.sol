@@ -24,7 +24,7 @@ contract Main {
     //Array of all the Developer Structs
     Developer_info[] public Developers;
 
-    address consumerAddress;
+    address public consumerAddress;
 
     //Event fired when a new Escrow/bounty is created
     event EscrowCreated(

@@ -8,9 +8,19 @@ async function main() {
     const main = mainResults[0];
     const mainAddress = mainResults[1];
 
-    await escrow_tests(owner, main);
+    const consumerAddress = await setup_consumer(mainAddress)
 
-    await setup_consumer(mainAddress)
+    await main.setConsumerAddress(consumerAddress);
+
+    const escrow = await deploy_escrow(owner, main);
+
+    await test_escrow(escrow);
+
+        /// Set consumer address in main
+        /// Call CLfunctions via deployed consumer
+        /// Call CLFunctions via one of the escrows
+        /// See how to store values in consumer and get them to escrow, edit source script to return correct data
+
 
 }
 
@@ -26,7 +36,7 @@ async function deploy_main() {
     return [main, mainAddress];
 }
 
-async function escrow_tests(owner, main) {
+async function deploy_escrow(owner, main) {
     // Check if Escrows is empty
     const EscrowsIsEmpty1 = await main.EscrowsIsEmpty();
     console.log("EscrowsIsEmpty", EscrowsIsEmpty1);
@@ -51,6 +61,36 @@ async function escrow_tests(owner, main) {
     const OtherIsEscrow = await main.isEscrow("0xCC1ddA58ec286dbb5deA3D2B377A9cFcCF924a5a");
     console.log("EscrowIsEscrow", EscrowIsEscrow);
     console.log("OtherIsEscrow", OtherIsEscrow);
+
+    //Attach Escrow contract to interact with Escrow methods
+    console.log("Checking Escrow contract itself");
+    const Escrow_contract = await hre.ethers.getContractFactory("Escrow");
+	const escrow_contract = await Escrow_contract.attach(escrowAddress);
+
+    return escrow_contract;
+}
+
+async function test_escrow(escrow_contract) {
+
+    const consumerAddressInEscrow = await escrow_contract.consumer();
+    const depositor = await escrow_contract.depositor();
+    const beneficiary = await escrow_contract.beneficiary();
+    const arbiter = await escrow_contract.arbiter();
+    const isApproved = await escrow_contract.isApproved();
+    const amount = await escrow_contract.amount();
+    const issueID = await escrow_contract.issueID();
+    const repo = await escrow_contract.repo();
+
+    console.log("\nEscrow contract variables:");
+    console.log("consumer", consumerAddressInEscrow);
+    console.log("depositor", depositor);
+    console.log("beneficiary", beneficiary);
+    console.log("arbiter", arbiter);
+    console.log("isApproved", isApproved);
+    console.log("amount", amount);
+    console.log("issueID", issueID);
+    console.log("repo", repo);
+
 }
 
 async function setup_consumer(mainAddress) {
@@ -83,26 +123,20 @@ async function setup_consumer(mainAddress) {
   
     console.log("Account balance:", (await deployer.getBalance()).toString());
   
-    const consumerContract = await ethers.getContractFactory(contractName);
+    const Consumer = await ethers.getContractFactory(contractName);
     console.log("hey ya");
   
   
     // DEPLOY CONSUMER
-    const deployedContract = await consumerContract.deploy(
+    const consumer = await Consumer.deploy(
       oracleAddress, 
       mainAddress,
       `${source}`
       );
-    //const deployedContract = await consumerContract.connect(arbiter).deploy("0xeA6721aC65BCeD841B8ec3fc5fEdeA6141a0aDE4", arbiter);
   
-    console.log("Deployed Functions Consumer address:", deployedContract.address);
+    console.log("Deployed Functions Consumer address:", consumer.address);
 
-
-        /// Set consumer address in main
-        /// Call CLfunctions via deployed consumer
-        /// Call CLFunctions via one of the escrows
-        /// See how to store values in consumer and get them to escrow, edit source script to return correct data
-
+    return consumer.address;
   }
   
   main()

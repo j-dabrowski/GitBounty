@@ -12,7 +12,7 @@ contract Escrow {
     string public issueID;
     string public repo;
 
-    FunctionsConsumerEscrow consumer;
+    FunctionsConsumerEscrow public consumer;
 
     event Approved(uint256 balance);
 
