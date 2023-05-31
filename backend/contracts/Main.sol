@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./Escrow.sol"; 
+import "./Escrow.sol";
 
 contract Main {
+    //Initalize Escrow Contract
+    Escrow public escrowInitialized;
     //Structs for each new EscrowContract
     struct Escrow_info {
         address escrowContract;
@@ -22,6 +24,8 @@ contract Main {
     //Array of all the Developer Structs
     Developer_info[] public Developers;
 
+    //ERRORS
+
     //Event fired when a new Escrow/bounty is created
     event EscrowCreated(
         address indexed escrowContract,
@@ -31,9 +35,23 @@ contract Main {
         string ownerUserName,
         uint256 issueId
     );
+    event EscrowClosed(address indexed escrowContract, uint256 issueId);
+    event EscrowClosedAfterApprove(
+        address indexed escrowContract,
+        uint256 issueId
+    );
 
     //Event fired when a new Developer signIn
     event NewDeveloper(address indexed developer, string loginName);
+
+    constructor(address escrowContractAddress) {
+        // Initialize the Escrow contract
+        escrowInitialized = Escrow(escrowContractAddress);
+    }
+
+    function setEscrowAddress(address escrowContractAddress) internal {
+        escrowInitialized = Escrow(escrowContractAddress);
+    }
 
     /**
      *
@@ -57,13 +75,9 @@ contract Main {
         string memory _ownerUserName,
         uint256 _issueId
     ) public payable {
-        Escrow newEscrow = new Escrow{
-            value: msg.value
-        }(_arbiter);
+        Escrow newEscrow = new Escrow{value: msg.value}(_arbiter);
 
-        Escrows.push(
-            Escrow_info(address(newEscrow), _ownerUserName, _issueId)
-        );
+        Escrows.push(Escrow_info(address(newEscrow), _ownerUserName, _issueId));
 
         emit EscrowCreated(
             address(newEscrow),
@@ -73,6 +87,67 @@ contract Main {
             _ownerUserName,
             _issueId
         );
+    }
+
+    /**
+     *
+     * @param escrowContractAddress address from escrow contract that we want to delete
+     */
+    function deleteEscrowArray(
+        address escrowContractAddress
+    ) external returns (uint256) {
+        setEscrowAddress(escrowContractAddress);
+        uint256 arrayLength = Escrows.length;
+
+        if (arrayLength == 0) {
+            revert("No escrows found");
+        }
+        for (uint256 i = 0; i < arrayLength; i++) {
+            if (Escrows[i].escrowContract == escrowContractAddress) {
+                if (i < arrayLength - 1) {
+                    Escrows[i] = Escrows[arrayLength - 1];
+                }
+                emit EscrowClosed(escrowContractAddress, Escrows[i].issueId);
+                Escrows.pop();
+
+                escrowInitialized.cancelEscrow(msg.sender);
+                return i;
+            }
+        }
+        revert("Escrow contract not found");
+    }
+
+    /**
+     *
+     * @param escrowContractAddress address of the escrow contract that we want to approve
+     * @param beneficiary who get the money after approve
+     */
+    function deleteEscrowArrayWhenApproved(
+        address escrowContractAddress,
+        address beneficiary
+    ) external returns (uint256) {
+        setEscrowAddress(escrowContractAddress);
+        uint256 arrayLength = Escrows.length;
+
+        if (arrayLength == 0) {
+            revert("No escrows found");
+        }
+        for (uint256 i = 0; i < arrayLength; i++) {
+            if (Escrows[i].escrowContract == escrowContractAddress) {
+                if (i < arrayLength - 1) {
+                    Escrows[i] = Escrows[arrayLength - 1];
+                }
+                emit EscrowClosedAfterApprove(
+                    escrowContractAddress,
+                    Escrows[i].issueId
+                );
+                Escrows.pop();
+
+                escrowInitialized.approve(beneficiary);
+                return i;
+            }
+        }
+        revert("Escrow contract not found");
     }
 
     function getEscrows() public view returns (Escrow_info[] memory) {
