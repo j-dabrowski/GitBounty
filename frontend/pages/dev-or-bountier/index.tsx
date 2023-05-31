@@ -1,7 +1,6 @@
 import React from 'react'
 import { Flex, Text } from '@chakra-ui/react'
-import { useSession, signIn } from 'next-auth/react'
-import { getServerSession } from 'next-auth'
+import { useRouter } from 'next/router'
 import { useGlitch } from 'react-powerglitch'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -11,10 +10,9 @@ import GithubUser from '../../components/github-user'
 import { requestReposIssues } from '../../scripts/issues'
 
 const Owner = () => {
-  const { data, status } = useSession()
   const [gitHubUser, setGitHubUser] = React.useState('')
-
-  const { userRepoIssues, setUserRepoIssues } = React.useContext(GithubUserContext)
+  const router = useRouter()
+  const [userModal, toggleUserModal] = React.useState(false)
   const glitchDev = useGlitch({
     playMode: 'always',
     createContainers: true,
@@ -69,36 +67,34 @@ const Owner = () => {
   })
 
   const handleGitHubUserName = async (value) => {
-    // const requestResponse = await requestReposIssues(value)
-    // setGithubUserRepos(requestResponse)
-    // setGitHubUser(value)
-
+    setGitHubUser(value)
     const response = await fetch(`/api/dev-or-bountier?owner=${value}`)
     const mine = await response.json()
-    console.log('response', mine)
+    return mine
   }
 
-  // console.log('userRepoIssues', userRepoIssues)
-
-  // const userReposWithIssues = githubUserRepos?.filter((repo) => repo.has_issues)
-  // setUserRepoIssues(userReposWithIssues)
   return (
     <Flex flexDirection="column" bgColor="black">
-      {status === 'authenticated' && <GithubUser handleGitHubUserName={handleGitHubUserName} />}
+      {userModal && <GithubUser handleGitHubUserName={handleGitHubUserName} />}
       <Flex height="100vh" flexDirection="column" justifyContent="space-evenly">
         <Flex justifyContent="center">
           <Image src="/pngegg (3).png" alt="" width={350} height={350} />
         </Flex>
         <Flex justifyContent="space-evenly">
           <Flex>
-            <Link onClick={() => signIn()} href="/" ref={glitchDev.ref}>
+            <Link
+              // onClick={() => router.push('/repo-issues', { shallow: true })}
+              href="/repo-issues"
+              replace
+              ref={glitchDev.ref}
+            >
               <Text color="red" fontSize={36} fontWeight="bold">
-                DEVELOPER {gitHubUser}
+                DEVELOPER
               </Text>
             </Link>
           </Flex>
           <Flex>
-            <Link onClick={() => signIn()} href="/" ref={glitchBountier.ref}>
+            <Link onClick={() => router.push('/repo-issues')} href="/" ref={glitchBountier.ref}>
               <Text color="blue" fontSize={36} fontWeight="semibold">
                 BOUNTIER
               </Text>
