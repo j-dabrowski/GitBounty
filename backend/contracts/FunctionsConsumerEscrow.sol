@@ -23,10 +23,10 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
     address public beneficiary;
     //-----------------------------
     Main main;
-    string source_store;
-    bytes secrets_store;
-    uint64 subscriptionId_store;
-    uint32 gasLimit_store;
+    string public source_store;
+    bytes public secrets_store;
+    uint64 public subscriptionId_store;
+    uint32 public gasLimit_store;
     //-----------------------------
     bool public isApproved = false;
     uint public amount;
@@ -152,6 +152,9 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
         );
     }
 
+    function setSubscriptionId(uint64 _subId) public {
+        subscriptionId_store = _subId;
+    }
     /**
      * @notice Function of the Excrow Contract to approve the payment after PR
      *

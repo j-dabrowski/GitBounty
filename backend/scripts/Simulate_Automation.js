@@ -8,13 +8,21 @@ async function main() {
     const main = mainResults[0];
     const mainAddress = mainResults[1];
 
-    const consumerAddress = await setup_consumer(mainAddress)
+    const consumerResults = await deploy_consumer(mainAddress);
+    const consumer = consumerResults[0];
+    const consumerAddress = consumerResults[1];
+
+    const subId = await createSubscription(consumerAddress);
+
+    await consumer.setSubscriptionId(subId);
 
     await main.setConsumerAddress(consumerAddress);
 
     const escrow = await deploy_escrow(owner, main);
 
     await test_escrow(escrow);
+
+    await test_consumer(consumer);
 
         /// Set consumer address in main
         /// Call CLfunctions via deployed consumer
@@ -54,7 +62,7 @@ async function deploy_escrow(owner, main) {
     // Get address from the struct just added to Escrows
     const escrow = await main.Escrows(0);
     const escrowAddress = escrow.escrowContract;
-    console.log("Escrow address is:", escrowAddress, escrowAddress.length, typeof(escrowAddress));
+    console.log("Escrow address is:", escrowAddress);
 
     // Check if isEscrow returns true for the address of the Escrow we just made, and false for a random address
     const EscrowIsEscrow = await main.isEscrow(escrowAddress);
@@ -63,9 +71,8 @@ async function deploy_escrow(owner, main) {
     console.log("OtherIsEscrow", OtherIsEscrow);
 
     //Attach Escrow contract to interact with Escrow methods
-    console.log("Checking Escrow contract itself");
     const Escrow_contract = await hre.ethers.getContractFactory("Escrow");
-	const escrow_contract = await Escrow_contract.attach(escrowAddress);
+	  const escrow_contract = await Escrow_contract.attach(escrowAddress);
 
     return escrow_contract;
 }
@@ -93,7 +100,54 @@ async function test_escrow(escrow_contract) {
 
 }
 
-async function setup_consumer(mainAddress) {
+async function test_consumer(consumer_contract) {
+  //console.log("FOUND");
+  const latestRequestId = await consumer_contract.latestRequestId();
+  const latestResponse = await consumer_contract.latestResponse();
+  const latestError = await consumer_contract.latestError();
+  //console.log("FOUND");
+  //-----------------------------
+  const depositor = await consumer_contract.depositor();
+  const beneficiary = await consumer_contract.beneficiary();
+  //console.log("FOUND");
+  //-----------------------------
+  const source_store = await consumer_contract.source_store();
+  const secrets_store = await consumer_contract.secrets_store();
+  const subscriptionId_store = await consumer_contract.subscriptionId_store();
+  const gasLimit_store = await consumer_contract.gasLimit_store();
+  //console.log("FOUND");
+  //-----------------------------
+  const isApproved = await consumer_contract.isApproved();
+  const amount = await consumer_contract.amount();
+  //console.log("FOUND");
+  //-----------------------------
+  const latestName = await consumer_contract.latestName();
+  //console.log("FOUND");
+  //const results = await consumer_contract.results();
+  //console.log("FOUND");
+
+  console.log("\nConsumer contract variables:");
+  console.log("latestRequestId", latestRequestId);
+  console.log("latestResponse", latestResponse);
+  console.log("latestError", latestError);
+
+  console.log("depositor", depositor);
+  console.log("beneficiary", beneficiary);
+
+  console.log("source_store", source_store);
+  console.log("secrets_store", secrets_store);
+  console.log("subscriptionId_store", subscriptionId_store);
+  console.log("gasLimit_store", gasLimit_store);
+
+  console.log("isApproved", isApproved);
+  console.log("amount", amount);
+
+  console.log("latestName", latestName);
+  //console.log("results", results);
+
+}
+
+async function deploy_consumer(mainAddress) {
     // DEPLOY FUNCTION CONSUMER FOR ESCROWS TO INTERACT WITH
 
     //const mainAddress = ethers.utils.getAddress("0x47ba4b430f995c6d62793E9fBB25Bd4d0ff2259E");
@@ -136,9 +190,74 @@ async function setup_consumer(mainAddress) {
   
     console.log("Deployed Functions Consumer address:", consumer.address);
 
-    return consumer.address;
+    return [consumer, consumer.address];
   }
   
+  async function createSubscription(consumerAddress) {
+    // 1 LINK is sufficient for this example
+    const linkAmount = "1";
+    // Set your consumer contract address. This contract will
+    // be added as an approved consumer of the subscription.
+    const consumer = consumerAddress;
+  
+    // Network-specific configs
+    // Polygon Mumbai LINK 0x326C977E6efc84E512bB9C30f76E30c160eD06FB
+    // See https://docs.chain.link/resources/link-token-contracts
+    // to find the LINK token contract address for your network.
+    const linkTokenAddress = "0x326C977E6efc84E512bB9C30f76E30c160eD06FB";
+    // Polygon Mumbai billing registry: 0xEe9Bf52E5Ea228404bB54BCFbbDa8c21131b9039
+    // See https://docs.chain.link/chainlink-functions/supported-networks
+    // for a list of supported networks and registry addresses.
+    const functionsBillingRegistryProxy =
+      "0xEe9Bf52E5Ea228404bB54BCFbbDa8c21131b9039";
+    const RegistryFactory = await ethers.getContractFactory(
+      "contracts/dev/functions/FunctionsBillingRegistry.sol:FunctionsBillingRegistry"
+    );
+    const registry = await RegistryFactory.attach(functionsBillingRegistryProxy);
+  
+    const createSubscriptionTx = await registry.createSubscription();
+    const createSubscriptionReceipt = await createSubscriptionTx.wait(1);
+    const subscriptionId =
+      createSubscriptionReceipt.events[0].args["subscriptionId"].toNumber();
+    console.log(`Subscription created with ID: ${subscriptionId}`);
+  
+    //Get the amount to fund, and ensure the wallet has enough funds
+    const juelsAmount = ethers.utils.parseUnits(linkAmount);
+    const LinkTokenFactory = await ethers.getContractFactory("LinkToken");
+    const linkToken = await LinkTokenFactory.attach(linkTokenAddress);
+  
+    const accounts = await ethers.getSigners();
+    const signer = accounts[0];
+  
+    // Check for a sufficent LINK balance to fund the subscription
+    const balance = await linkToken.balanceOf(signer.address);
+    if (juelsAmount.gt(balance)) {
+      throw Error(`Insufficent LINK balance`);
+    }
+  
+    console.log(`Funding with ` + juelsAmount + ` Juels (1 LINK = 10^18 Juels)`);
+    const fundTx = await linkToken.transferAndCall(
+      functionsBillingRegistryProxy,
+      juelsAmount,
+      ethers.utils.defaultAbiCoder.encode(["uint64"], [subscriptionId])
+    );
+    await fundTx.wait(1);
+    console.log(
+      `Subscription ${subscriptionId} funded with ${juelsAmount} Juels (1 LINK = 10^18 Juels)`
+    );
+  
+    //Authorize deployed contract to use new subscription
+    console.log(
+      `Adding consumer contract address ${consumer} to subscription ${subscriptionId}`
+    );
+    const addTx = await registry.addConsumer(subscriptionId, consumer);
+    await addTx.wait(1);
+    console.log(`Authorized consumer contract: ${consumer}`);
+
+    return subscriptionId;
+  }
+
+
   main()
     .then(() => process.exit(0))
     .catch((error) => {
