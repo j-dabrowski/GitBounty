@@ -2,9 +2,11 @@ import Navbar from "../components/navigation/navbar"
 
 const MainLayout = ({ children }) => {
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      {children}
+      <div className="flex-grow">
+        {children}
+      </div>
     </div>
   )
 }

@@ -1,38 +1,37 @@
-@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,500;1,400&display=swap');
-
-html,
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 body {
-	background-color: black;
-	font-family: 'Rubik';
-	font-weight: normal;
-}
-h1{
-	margin-bottom: 1rem;
-}
-h2{
-	margin-bottom: .5rem;
-	font-weight: normal;
-
+  @apply bg-gradient-to-b from-gray-900 to-black;
 }
 
-p{
-	line-height: 1.5rem;
-	font-weight: lighter;
+@layer utilities {
+  .bg-gradient-redPill {
+    background-image: conic-gradient(#d72a23 20deg, transparent 120deg);
+  }
+  .bg-gradient-bluePill {
+    background-image: conic-gradient(#3c56be 20deg, transparent 120deg);
+  }
+  .box::before {
+    @apply content-[''] absolute bg-gradient-redPill w-[550px] h-[550px] top-[-25%] left-[-45%] animate-fullSpin;
+  }
 
-}
+  .box::after {
+    @apply rounded-full content-["Repo-Owner"] text-[#d72a23] text-4xl hover:scale-105 transition duration-300  w-[94%] h-[94%] absolute bg-black top-[3%] left-[3%] flex justify-center items-center uppercase tracking-[3px] font-medium animate-text;
+  }
 
-a {
-	color: inherit;
-	text-decoration: none;
-}
+  .box2::before {
+    @apply content-[''] absolute bg-gradient-bluePill w-[550px] h-[550px] top-[-25%] left-[-45%] animate-fullSpin2;
+  }
 
-* {
-	box-sizing: border-box;
-	padding: 0;
-	margin: 0;
-}
+  .box2::after {
+    @apply rounded-full hover:scale-105 transition duration-300 content-["Developer"] text-[#3c56be] text-4xl w-[94%] h-[94%] absolute bg-black top-[3%] left-[3%] flex justify-center items-center uppercase tracking-[3px] font-medium;
+  }
 
-@media (prefers-color-scheme: dark) {
-	html {
-	}
+  .line {
+    @apply text-[1.5rem] sm:text-[3.5rem] text-center whitespace-nowrap overflow-hidden w-[22ch] animate-[typewriter_3s_steps(22)_1s,cursor_500ms_steps(22)_infinite] border-r-4 border-r-[rgba(230,181,57,0.7)];
+  }
+  .line2 {
+    @apply text-[1.5rem] sm:text-[3.5rem] text-center whitespace-nowrap overflow-hidden w-[30ch] animate-[typewriter2_3s_steps(30)_1s,cursor_500ms_steps(30)_infinite] border-r-4 border-r-[rgba(230,181,57,0.7)];
+  }
 }
