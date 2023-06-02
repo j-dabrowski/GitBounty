@@ -19,7 +19,11 @@ Setup env. for FrontEnd :
 You need to create those:
 
 GITHUB_TOKEN
+
 CLIENT_ID
+
 CLIENT_SECRET
+
 NEXTAUTH_URL=http://localhost:3000
+
 JWT_SECRET
