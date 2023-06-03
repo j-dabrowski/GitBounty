@@ -1,10 +1,8 @@
-import { Form, Skeleton, Card } from "web3uikit";
+import { Form, Skeleton } from "web3uikit";
 import { useEffect, useState } from "react";
-import { Fragment } from "react";
 import useSWR from "swr";
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useMoralis } from "react-moralis";
 import { ethers } from "ethers";
 
 import BountyModal from "../../components/Bounty-modal";
@@ -55,9 +53,9 @@ export default function RepoOwner() {
   /**
    * @notice Function executed when we click on the button for each card
    */
-  const handleClick = (issueName, issueId) => {
+  const handleClick = (name, id) => {
     setShowModal(true);
-    setFormData({ ...formData, issueName, issueId });
+    setFormData({ ...formData, name, id });
   };
   //END
   /**
@@ -168,38 +166,20 @@ export default function RepoOwner() {
                         <BountyModal
                           esVisible={showModal}
                           onClose={hideModal}
-                          issueName={formData.issueName}
-                          issueId={formData.issueId}
+                          name={formData.name}
+                          id={formData.id}
                         />
-                        <Card
-                          title={`Title: ${issue.title}`}
-                          description={issue.issueUrl}
-                        >
-                          <div className="flex flex-col justify-center sm:flex-row sm:justify-between">
-                            <div className="italic text-sm mb-4">
-                              Issues created by {issue.name}
-                            </div>
-                            <div className="text-xl font-bold">
-                              IssueID: #{issue.issueId}
-                            </div>
-                            <div className="italic text-lm mb-4">
-                              {isIssueIdIncluded ? (
-                                <div className=" bg-red-700  text-white z-10 font-bold py-2 px-4 border-b-4  border-red-200  rounded">
-                                  Already Created
-                                </div>
-                              ) : (
-                                <button
-                                  onClick={() =>
-                                    handleClick(issue.name, issue.issueId)
-                                  }
-                                  className="bg-lila hover:bg-lilaSuave text-white z-10 font-bold py-2 px-4 border-b-4 border-lilaSuave hover:border-lila rounded"
-                                >
-                                  Create Bounty
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        </Card>
+                        <CardCustom
+                          title={issue.title}
+                          id={issue.issueId}
+                          name={issue.name}
+                          issueUrl={issue.issueUrl}
+                          avatar={issue.avatar}
+                          repo={issue.repo}
+                          description={issue.description}
+                          isIssueIdIncluded={isIssueIdIncluded}
+                          handleClick={handleClick}
+                        ></CardCustom>
                       </div>
                     );
                   });

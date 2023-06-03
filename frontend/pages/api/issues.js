@@ -29,8 +29,9 @@ export default async function (req, res) {
         authorID: issue.user.id,
         issueId: issue.id,
         issueUrl: issue.url,
-        gravatar: issue.user.avatar_url,
-        user: issue.user.gravatar_id,
+        avatar: issue.user.avatar_url,
+        repo: repo.name,
+        description: issue.body.toLocaleLowerCase(),
       }));
 
       if (issuesWithDetails.length > 0) {
