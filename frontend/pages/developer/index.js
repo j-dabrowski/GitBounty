@@ -34,7 +34,7 @@ export default function Developer() {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       console.log(signer);
-      const contractAddress = "0x742B99d37532985ab0024b461c2395969a58a7f8";
+      const contractAddress = "0x3b03C7A681BAa8d506FE2d540841f5c76e242697";
       const user = await signer.getAddress();
       console.log(user);
 
@@ -63,28 +63,17 @@ export default function Developer() {
       alert("You need to Connect your Wallet");
       window.location.href = "http://localhost:3000/";
     }*/
-    if (status === "loading") {
-      return; // Still loading session data, do nothing
-    }
-
-    if (!session) {
-      // User is not signed in, show sign-in button
-      signIn();
-    } else {
-      // User is signed in and was redirected from the sign-in page
-
-      checkRegistrationOnChain();
-    }
-  }, [session, status, router, isWeb3Enabled]);
+    checkRegistrationOnChain();
+  }, [isWeb3Enabled]);
 
   return (
     <div className="flex min-h-max justify-center text-white ">
       {isRegistered ? (
         <Fragment>
           <div className="flex flex-col justify-center items-center">
-            <div className="flex items-center text-center mb-10 mt-10 w-[600px]">
-              <h2 className=" text-5xl">
-                You can see all the bounties you have created
+            <div className="flex items-center justify-center mb-10 mt-10 w-[300px] sm:w-[600px]">
+              <h2 className="text-center text-2xl sm:text-4xl">
+                You can see all the <br></br>bounties avalaible to work on.
               </h2>
             </div>
             <div className=" h-screen">
@@ -101,15 +90,20 @@ export default function Developer() {
                     ownerUserName,
                     issueId,
                     amount,
+                    url,
                   } = issue;
                   return (
-                    <BountiesActive
-                      issueId={issueId}
-                      ownerUserName={ownerUserName}
-                      escrowContract={escrowContract}
-                      idObject={id}
-                      amount={amount}
-                    ></BountiesActive>
+                    <div className="p-2">
+                      <BountiesActive
+                        issueId={issueId}
+                        ownerUserName={ownerUserName}
+                        escrowContract={escrowContract}
+                        idObject={id}
+                        amount={amount}
+                        arbiter={arbiter}
+                        url={url}
+                      ></BountiesActive>
+                    </div>
                   );
                 })
               )}

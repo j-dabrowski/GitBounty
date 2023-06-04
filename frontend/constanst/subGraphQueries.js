@@ -15,6 +15,7 @@ const GET_ACTIVE_ESCROW = gql`
       ownerUserName
       issueId
       amount
+      url
     }
   }
 `;

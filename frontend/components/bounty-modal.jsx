@@ -4,7 +4,7 @@ import { Modal, Input, useNotification } from 'web3uikit'
 import createBounty from '../scripts/createBounty'
 import { ethers } from 'ethers'
 
-export default function BountyModal({ esVisible, onClose , name  , id}) {
+export default function BountyModal({ esVisible, onClose , name  , id, issueUrl}) {
   //Creamos un useState para linkear lo que escribamos en modal aqui
   const [PriceToCreateBounty, setPriceToCreateBounty] = useState('')
 
@@ -27,7 +27,7 @@ export default function BountyModal({ esVisible, onClose , name  , id}) {
   const handleOk =  async () => {
     const arbiterAddress = await getAccountAddress()
     const value = PriceToCreateBounty
-    await createBounty(arbiterAddress,name,id ,value )
+    await createBounty(arbiterAddress,name,id ,issueUrl,value )
     
     setPriceToCreateBounty('0')
     dispatch({

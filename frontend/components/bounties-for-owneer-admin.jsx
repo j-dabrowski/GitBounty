@@ -1,11 +1,11 @@
 import { ethers } from "ethers";
 
-import {  Card, useNotification } from "web3uikit";
+import { useNotification } from "web3uikit";
 
 
 import  deleteEscrowArray from "../scripts/deleteEscrowArray"
 
-export default function BountiesOwnerAdmin({issueId,ownerUserName,escrowContract,idObject, amount}){
+export default function BountiesOwnerAdmin({arbiter,issueId,ownerUserName,escrowContract,idObject, amount}){
     const dispatch = useNotification()
 
     const handleClick = async function(){
@@ -25,23 +25,24 @@ export default function BountiesOwnerAdmin({issueId,ownerUserName,escrowContract
         }
     }
 
+    const limitedAddress = arbiter.slice(0, 5 ) + "..." + arbiter.slice(-4)
+
 return (
-    <div className="flex w-[350px] sm:w-[700px] gap-2">
-    <Card
-    key={idObject}
-    title={`Get a bounty if you solve the issue`}
-    description={`Do click to see the issue in Github`}
-  >
-    <div className="flex flex-col justify-center sm:flex-row sm:justify-between">
+  <div className=" transition ease-out duration-500  hover:scale-105  p-3 flex-row sm:flex jussm:justify-between bg-[#f2f6ff] hover:bg-slate-200 h-fit rounded-lg border-solid border-lilaSuave border-4">
+  <div className=" flex flex-col items-center w-[100%] sm:w-[20%] p-2">
+      <p className=" italic text-center text-sm mb-[5px] text-[#616265]">Bounty created by</p>
+      <p className=" italic font-semibold text-sm mb-[5px] text-black ">{limitedAddress}</p>
       
-      <div className="italic text-sm mb-4 text-lila font-bold">
-        This Bounty has a value of {ethers.utils.formatEther(amount)} MATIC
-      </div>
-      <div className=" text-xl font-bold">
-        IssueID: #{issueId}
-      </div>
-      <div className="italic text-lm mb-4">
-        <button
+      <p className=" text-sm text-center text-black font-semibold"><span className=" text-[#757e94]">Username:</span> {ownerUserName}</p>
+  </div>
+  <div className="flex flex-col items-center justify-between w-[100%] sm:w-[65%] p-2">
+  <p className=" italic text-sm mb-[5px] text-[#757e94]">Issue with ID <span className=" font-bold">#{issueId}</span></p>
+      <h2 className=" text-xl text-lila font-semibold">Your Bounty Value {ethers.utils.formatEther(amount)} MATIC</h2>
+      <p className=" text-base mb-[5px] text-[#757e94] pl-4 pr-4">Click if you want to cancel the Bounty</p>
+      
+  </div>
+  <div className="flex justify-center items-center w-[100%] sm:w-[20%]">
+  <button
           onClick={() =>
             handleClick()
           }
@@ -49,9 +50,7 @@ return (
         >
           Cancel Bounty
         </button>
-      </div>
-    </div>
-  </Card>
   </div>
+</div>
 )
 }

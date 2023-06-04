@@ -28,7 +28,7 @@ export default async function (req, res) {
         name: issue.user.login,
         authorID: issue.user.id,
         issueId: issue.id,
-        issueUrl: issue.url,
+        issueUrl: issue.html_url,
         avatar: issue.user.avatar_url,
         repo: repo.name,
         description: issue.body.toLocaleLowerCase(),

@@ -51,7 +51,7 @@ export default function OwnerAccount() {
   });
   return (
     <Fragment>
-      <div className="flex  justify-center items-center mt-[150px] sm:mt-[50px]">
+      <div className="flex justify-center items-center mt-[150px] sm:mt-[50px]">
         {showForm && (
           <div className=" w-[350px] sm:w-[600px]">
             <Form
@@ -73,7 +73,7 @@ export default function OwnerAccount() {
           </div>
         )}
       </div>
-      <div className="flex flex-col justify-start items-center gap-4">
+      <div className="flex flex-col justify-start items-center gap-4 ">
         {!data ? (
           <div>Loading...</div>
         ) : (
@@ -95,6 +95,7 @@ export default function OwnerAccount() {
                 escrowContract={escrowContract}
                 idObject={id}
                 amount={amount}
+                arbiter={arbiter}
               ></BountiesOwnerAdmin>
             );
           })

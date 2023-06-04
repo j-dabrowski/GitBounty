@@ -31,7 +31,7 @@ return(
                               ) : (
                                 <button
                                   onClick={() =>
-                                    handleClick(name,id)
+                                    handleClick(name,id,issueUrl)
                                   }
                                   className="bg-lila animate-pulse hover:bg-lilaSuave text-white font-bold py-2 px-4 border-b-4 border-lilaSuave hover:border-lila rounded"
                                 >

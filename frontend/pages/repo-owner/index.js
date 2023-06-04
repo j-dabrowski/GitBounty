@@ -53,9 +53,9 @@ export default function RepoOwner() {
   /**
    * @notice Function executed when we click on the button for each card
    */
-  const handleClick = (name, id) => {
+  const handleClick = (name, id, issueUrl) => {
     setShowModal(true);
-    setFormData({ ...formData, name, id });
+    setFormData({ ...formData, name, id, issueUrl });
   };
   //END
   /**
@@ -67,7 +67,7 @@ export default function RepoOwner() {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       console.log(signer);
-      const contractAddress = "0x742B99d37532985ab0024b461c2395969a58a7f8";
+      const contractAddress = "0x3b03C7A681BAa8d506FE2d540841f5c76e242697";
 
       const contract = new ethers.Contract(contractAddress, abi, signer);
       const getIssueIdInArray = await contract.getEscrows();
@@ -168,6 +168,7 @@ export default function RepoOwner() {
                           onClose={hideModal}
                           name={formData.name}
                           id={formData.id}
+                          issueUrl={formData.issueUrl}
                         />
                         <CardCustom
                           title={issue.title}
