@@ -1,8 +1,13 @@
 import {  useMoralis } from "react-moralis";
 import Image from 'next/image';
 import Link from "next/link";
+import { Fragment } from "react";
 
-import HeroComponent from "../components/navigation/hero";
+import HeroComponent from "../components/navigation/hero-component";
+import ExplanationComp from "../components/navigation/explanation-component";
+import FunctionsComp from "../components/navigation/functions-comp";
+import CodersComp from "../components/navigation/coders-comp";
+
 
 
 
@@ -15,9 +20,9 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <main className="flex justify-center items-start p-4">
-        <div className="flex justify-center mt-10">
+        <div className="flex justify-center">
             {isWeb3Enabled ?(
-              <div className="">
+              <div className="mt-10">
                   <div className="flex justify-center items-center mb-20">
                      <p className="line text-lila font-bold">You need to choose now...</p>
                   </div>
@@ -33,9 +38,33 @@ export default function Home() {
                   </div>
                 </div>
               </div>) : (
-                <div className="w-full" >
-                <HeroComponent></HeroComponent>
+                <div className="flex flex-col">
+                  <div className="w-[100%]">
+                    <div className="w-[360px] sm:w-[1000px]" >
+                      <HeroComponent></HeroComponent>
+                    </div>
+                  </div>
+                
+                  <div className="w-[100%]">
+                    <div className="w-[360px] sm:w-[1000px]" >
+                      <ExplanationComp></ExplanationComp>
+                    </div>
+                  </div>
+
+                  <div className="w-[100%]">
+                    <div className="w-[360px] sm:w-[1000px]" >
+                      <FunctionsComp></FunctionsComp>
+                    </div>
+                  </div>
+
+                  <div className="w-[100%]">
+                    <div className="w-[360px] sm:w-[1000px]" >
+                      <CodersComp></CodersComp>
+                    </div>
+                  </div>
+               
                 </div>
+                
               )}
             </div>
        </main>
