@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import { ethers } from "ethers";
-import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import GET_ACTIVE_ESCROW from "../../constanst/subGraphQueries";
@@ -13,8 +12,6 @@ import BountiesActive from "../../components/bounties-active";
 
 export default function Developer() {
   const [isRegistered, setIsRegistered] = useState(false);
-  //Intializer of next-auth/react session
-  const { data: session, status } = useSession();
 
   //Initialized router from useRouter
   const router = useRouter();

@@ -21,9 +21,6 @@ export default function RepoOwner() {
   //Intializer useRouter()
   const router = useRouter();
 
-  //Intializer of next-auth/react session
-  const { data: session, status } = useSession();
-
   /**
    * @notice We get the input of the Form in the formData.owner
    * @notice We execute the fetcher function that we need to use the SWR librarie
@@ -92,25 +89,8 @@ export default function RepoOwner() {
   };
 
   /**
-   * @notice Useeffect to execute the singIn() from nextAuth
+   * @notice Useeffect to execute the checkIssueIdOnChain()
    */
-
-  useEffect(() => {
-    if (status === "loading") {
-      return; // Still loading session data, do nothing
-    }
-
-    if (!session) {
-      // User is not signed in, show sign-in button
-      signIn();
-    } else if (session && router.query.redirected) {
-      // User is signed in and was redirected from the sign-in page
-      const { redirected } = router.query;
-      router.push(redirected); // Redirect back to the original page
-    }
-  }, [session, status, router]);
-  //END
-
   useEffect(() => {
     checkIssueIdOnChain();
   }, [data]);

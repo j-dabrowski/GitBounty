@@ -1,4 +1,3 @@
-import { getSession } from "next-auth/react";
 import { useState } from "react";
 import { Fragment } from "react";
 import React from "react";
@@ -131,19 +130,4 @@ export default function OwnerAccount() {
       </div>
     </Fragment>
   );
-}
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
-  return {
-    props: { session },
-  };
 }
