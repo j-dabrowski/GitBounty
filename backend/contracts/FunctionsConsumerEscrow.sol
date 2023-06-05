@@ -18,6 +18,8 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
     bytes32 public latestRequestId;
     bytes public latestResponse;
     bytes public latestError;
+
+    string public Author_UserRepoIssue;
     //-----------------------------
     address public depositor;
     address public beneficiary;
@@ -119,7 +121,17 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
         //bool approved = functionResult.status; 
         //string author = functionResult.author; 
         //results(19) = taskInfo(approved, author)
-        latestName = string(abi.encodePacked(response));
+        //latestName = string(abi.encodePacked(response));
+        // (string memory s1, string memory s2) = abi.decode(data, (string, string))
+
+        bool nilErr = (err.length == 0);
+        if (nilErr) {
+        //(string memory author, string memory userRepoIssue) = abi.decode(response, (string, string));
+            string memory _Author_UserRepoIssue = string(abi.encodePacked(response));
+            Author_UserRepoIssue = _Author_UserRepoIssue;
+        }
+
+        
 
         emit OCRResponse(requestId, response, err);
         //---------------------------------------
@@ -143,12 +155,14 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
     }
 
     function executeRequestFromEscrow(string[] calldata args) public onlyEscrow returns (bytes32) {
+        bytes memory secrets;
+        uint32 gasLimit = 300000;
         return executeRequest(
             source_store,
-            secrets_store,
+            secrets,
             args,
             subscriptionId_store,
-            gasLimit_store
+            gasLimit
         );
     }
 

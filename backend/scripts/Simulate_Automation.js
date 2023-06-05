@@ -24,6 +24,8 @@ async function main() {
 
     await test_consumer(consumer);
 
+
+    await test_functions(escrow, consumer);
         /// Set consumer address in main
         /// Call CLfunctions via deployed consumer
         /// Call CLFunctions via one of the escrows
@@ -193,6 +195,12 @@ async function deploy_consumer(mainAddress) {
     return [consumer, consumer.address];
   }
   
+  async function test_functions(escrow, consumer) {
+    await escrow.makeFunctionRequest();
+    const Author_UserRepoIssue = await consumer.Author_UserRepoIssue();
+    console.log("Author_UserRepoIssue", Author_UserRepoIssue);
+  }
+
   async function createSubscription(consumerAddress) {
     // 1 LINK is sufficient for this example
     const linkAmount = "1";
