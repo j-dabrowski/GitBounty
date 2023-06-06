@@ -1,36 +1,34 @@
 import { NotificationProvider } from "web3uikit";
 import { MoralisProvider } from "react-moralis";
-import { useRouter } from 'next/router'
-import {SessionProvider } from "next-auth/react"
+import { useRouter } from "next/router";
+import { SessionProvider } from "next-auth/react";
 //Initializar Apollo
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 
-import '../styles/globals.css'
-import MainLayout from '../layout/mainLayout'
+import "../styles/globals.css";
+import MainLayout from "../layout/mainLayout";
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  uri:"https://api.studio.thegraph.com/query/45112/hackaton-auspain-v2/version/latest",
-})
-
-
+  uri: "https://api.studio.thegraph.com/query/45112/hackaton-auspain-v2/version/latest",
+});
 
 const MyApp = ({ Component, pageProps, session }) => {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
-    <SessionProvider session = {session}>
-  <MoralisProvider initializeOnMount={false}>
-    <ApolloProvider client={client}>
-        <MainLayout>
-        <NotificationProvider>
-          <Component {...pageProps} />
-          </NotificationProvider>
-        </MainLayout>
+    <SessionProvider session={session}>
+      <MoralisProvider initializeOnMount={false}>
+        <ApolloProvider client={client}>
+          <MainLayout>
+            <NotificationProvider>
+              <Component {...pageProps} />
+            </NotificationProvider>
+          </MainLayout>
         </ApolloProvider>
-    </MoralisProvider>
+      </MoralisProvider>
     </SessionProvider>
-  )
-}
+  );
+};
 
-export default MyApp
+export default MyApp;
