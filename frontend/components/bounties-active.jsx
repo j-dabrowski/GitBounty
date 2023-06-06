@@ -1,5 +1,7 @@
 import { ethers } from "ethers";
 
+import executedChainlink from "../scripts/executeRequest";
+
 
 export default function BountiesActive({url,arbiter,issueId,ownerUserName,escrowContract,idObject, amount}){
 
@@ -8,6 +10,13 @@ export default function BountiesActive({url,arbiter,issueId,ownerUserName,escrow
   const handleClick = ()=>{
     window.location.href = url;
   }
+
+  const handleChainlink =async ()=>{
+    
+     await executedChainlink(["repoName", "ownerUsername", "issueID"])
+     console.log("done");
+  }
+  
     
     return(
       <div className=" transition ease-out duration-500  hover:scale-105  p-3 flex-row sm:flex jussm:justify-between bg-[#f2f6ff] hover:bg-slate-200 h-fit rounded-lg border-solid border-[#3c56be] border-4">
@@ -26,6 +35,9 @@ export default function BountiesActive({url,arbiter,issueId,ownerUserName,escrow
               <div className="flex justify-center items-center w-[100%] sm:w-[20%]">
               <button onClick={handleClick} class="bg-lila hover:bg-lilaSuave text-white z-10 font-bold py-2 px-4 border-b-4 border-lilaSuave hover:border-lila rounded ">
           Go to Github
+        </button>
+        <button onClick={handleChainlink} class="bg-lila hover:bg-lilaSuave text-white z-10 font-bold py-2 px-4 border-b-4 border-lilaSuave hover:border-lila rounded ">
+          Chainlink
         </button>
               </div>
           </div>
