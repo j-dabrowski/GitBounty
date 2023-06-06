@@ -5,7 +5,7 @@ import {Functions, FunctionsClient} from "./dev/functions/FunctionsClient.sol";
 // import "@chainlink/contracts/src/v0.8/dev/functions/FunctionsClient.sol"; // Once published
 import {ConfirmedOwner} from "@chainlink/contracts/src/v0.8/ConfirmedOwner.sol";
 
-import "./Main.sol"; 
+import "./Main.sol";
 
 /**
  * @title Functions Consumer contract
@@ -65,10 +65,11 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
         amount = msg.value;
     }
 
-    modifier onlyEscrow {
+    modifier onlyEscrow() {
         require(main.isEscrow(msg.sender));
         _;
     }
+
     /**
      * @notice Send a simple request
      *
@@ -118,20 +119,20 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
         latestResponse = response;
         latestError = err;
         //----------------------
-        //bool approved = functionResult.status; 
-        //string author = functionResult.author; 
+        //bool approved = functionResult.status;
+        //string author = functionResult.author;
         //results(19) = taskInfo(approved, author)
         //latestName = string(abi.encodePacked(response));
         // (string memory s1, string memory s2) = abi.decode(data, (string, string))
 
         bool nilErr = (err.length == 0);
         if (nilErr) {
-        //(string memory author, string memory userRepoIssue) = abi.decode(response, (string, string));
-            string memory _Author_UserRepoIssue = string(abi.encodePacked(response));
+            //(string memory author, string memory userRepoIssue) = abi.decode(response, (string, string));
+            string memory _Author_UserRepoIssue = string(
+                abi.encodePacked(response)
+            );
             Author_UserRepoIssue = _Author_UserRepoIssue;
         }
-
-        
 
         emit OCRResponse(requestId, response, err);
         //---------------------------------------
@@ -154,16 +155,19 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
         addExternalRequest(oracleAddress, requestId);
     }
 
-    function executeRequestFromEscrow(string[] calldata args) public onlyEscrow returns (bytes32) {
+    function executeRequestFromEscrow(
+        string[] calldata args
+    ) public onlyEscrow returns (bytes32) {
         bytes memory secrets;
-        uint32 gasLimit = 300000;
-        return executeRequest(
-            source_store,
-            secrets,
-            args,
-            subscriptionId_store,
-            gasLimit
-        );
+        uint32 gasLimit = 500000;
+        return
+            executeRequest(
+                source_store,
+                secrets,
+                args,
+                subscriptionId_store,
+                gasLimit
+            );
     }
 
     function setSubscriptionId(uint64 _subId) public {

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./FunctionsConsumerEscrow.sol"; 
+import "./FunctionsConsumerEscrow.sol";
 
 contract Escrow {
     address public depositor;
@@ -16,7 +16,12 @@ contract Escrow {
 
     event Approved(uint256 balance);
 
-    constructor(address _arbiter, address _consumerAddress, string memory _issueID, string memory _repo) payable {
+    constructor(
+        address _arbiter,
+        address _consumerAddress,
+        string memory _issueID,
+        string memory _repo
+    ) payable {
         arbiter = _arbiter;
         issueID = _issueID;
         repo = _repo;
@@ -39,11 +44,9 @@ contract Escrow {
     }
 
     function makeFunctionRequest() public {
-        string[] memory args;
+        string[] memory args = new string[](2);
         args[0] = repo;
         args[1] = issueID;
         consumer.executeRequestFromEscrow(args);
     }
-
-
 }
