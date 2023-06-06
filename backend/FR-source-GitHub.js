@@ -13,7 +13,6 @@ console.log("TESTETSTTETSTETS");
 // https://api.github.com/repos/:testaccount2347/:Test_Repo/pulls?state=all
 
 const issueId = 6;
-
 const username = 'testaccount2347';
 const repoName = 'Test_Repo';
 const url = `https://api.github.com/search/issues?q=repo:${username}/${repoName}+type:pr+is:merged`;
@@ -92,7 +91,7 @@ for (let i = 0; i < mergedPulls.length; ++i) {
   }
 }
 
-return Buffer.Functions.encodeString("null");
+return Buffer.Functions.encodeString("null_test_string");
 
 // Solidity doesn't support decimals so multiply by 100 and round to the nearest integer
 // Use Functions.encodeUint256 to encode an unsigned integer to a Buffer

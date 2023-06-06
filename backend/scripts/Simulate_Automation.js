@@ -18,14 +18,14 @@ async function main() {
 
     await main.setConsumerAddress(consumerAddress);
 
-    const escrow = await deploy_escrow(owner, main);
+    //const escrow = await deploy_escrow(owner, main);
 
-    await test_escrow(escrow);
+    //await test_escrow(escrow);
 
-    await test_consumer(consumer);
+    //await test_consumer(consumer);
 
 
-    await test_functions(escrow, consumer);
+    await test_functions(consumer);
         /// Set consumer address in main
         /// Call CLfunctions via deployed consumer
         /// Call CLFunctions via one of the escrows
@@ -195,10 +195,44 @@ async function deploy_consumer(mainAddress) {
     return [consumer, consumer.address];
   }
   
-  async function test_functions(escrow, consumer) {
-    await escrow.makeFunctionRequest();
+  async function test_functions(consumer) {
+    console.log("\nTesting Chainlink Functions");
+    //await escrow.makeFunctionRequest();
+
+
+    const latestRequestId1 = await consumer.latestRequestId();
+    console.log(latestRequestId1);
+    const latestResponse1 = await consumer.latestResponse();
+    console.log(latestResponse1);
+    const latestError1 = await consumer.latestError();
+    console.log(latestError1);
+    
+    const testvar1 = await consumer.testvar();
+    console.log("testvar", testvar1);
+
+
+    const args = ["notional", "19"];
+    //const result = await consumer.executeRequestFromEscrow(args)
+    const result = await consumer.executeRequest2()
+    const receipt = await result.wait(10);
+    //console.log(result);
+    console.log("\n\n");
+    console.log(receipt);
+
+    const latestRequestId2 = await consumer.latestRequestId();
+    console.log(latestRequestId2);
+    const latestResponse2 = await consumer.latestResponse();
+    console.log(latestResponse2);
+    const latestError2 = await consumer.latestError();
+    console.log(latestError2);
+
+    const testvar2 = await consumer.testvar();
+    console.log("testvar", testvar2);
+
+
     const Author_UserRepoIssue = await consumer.Author_UserRepoIssue();
     console.log("Author_UserRepoIssue", Author_UserRepoIssue);
+
   }
 
   async function createSubscription(consumerAddress) {

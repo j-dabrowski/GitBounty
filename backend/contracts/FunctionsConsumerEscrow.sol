@@ -20,6 +20,7 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
     bytes public latestError;
 
     string public Author_UserRepoIssue;
+    string public testvar;
     //-----------------------------
     address public depositor;
     address public beneficiary;
@@ -27,6 +28,7 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
     Main main;
     string public source_store;
     bytes public secrets_store;
+    string[] public args_store;
     uint64 public subscriptionId_store;
     uint32 public gasLimit_store;
     //-----------------------------
@@ -85,19 +87,54 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
         string[] memory args,
         uint64 subscriptionId,
         uint32 gasLimit
-    ) public onlyOwner returns (bytes32) {
+    ) public returns (bytes32) {
+        testvar = "TEST_STRING";
         Functions.Request memory req;
         req.initializeRequest(
             Functions.Location.Inline,
             Functions.CodeLanguage.JavaScript,
             source
         );
-        if (secrets.length > 0) {
-            req.addRemoteSecrets(secrets);
-        }
-        if (args.length > 0) req.addArgs(args);
+        //if (secrets.length > 0) {
+        //    req.addRemoteSecrets(secrets);
+        //}
+        //if (args.length > 0) req.addArgs(args);
 
         bytes32 assignedReqID = sendRequest(req, subscriptionId, gasLimit);
+        latestRequestId = assignedReqID;
+        return assignedReqID;
+    }
+
+    function executeRequest2() public returns (bytes32) {
+        Functions.Request memory req;
+        req.initializeRequest(
+            Functions.Location.Inline,
+            Functions.CodeLanguage.JavaScript,
+            source_store
+        );
+
+        req.addRemoteSecrets(secrets_store);
+        req.addArgs(args_store);
+
+        uint32 gasLimit = 300000;
+        bytes32 assignedReqID = sendRequest(req, subscriptionId_store, gasLimit);
+        latestRequestId = assignedReqID;
+        return assignedReqID;
+    }
+
+    function executeRequest3(string[] calldata args) public returns (bytes32) {
+        Functions.Request memory req;
+        req.initializeRequest(
+            Functions.Location.Inline,
+            Functions.CodeLanguage.JavaScript,
+            source_store
+        );
+
+        req.addRemoteSecrets(secrets_store);
+        req.addArgs(args_store);
+
+        uint32 gasLimit = 300000;
+        bytes32 assignedReqID = sendRequest(req, subscriptionId_store, gasLimit);
         latestRequestId = assignedReqID;
         return assignedReqID;
     }
@@ -124,18 +161,18 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
         //latestName = string(abi.encodePacked(response));
         // (string memory s1, string memory s2) = abi.decode(data, (string, string))
 
-        bool nilErr = (err.length == 0);
-        if (nilErr) {
+        //bool nilErr = (err.length == 0);
+        //if (nilErr) {
         //(string memory author, string memory userRepoIssue) = abi.decode(response, (string, string));
-            string memory _Author_UserRepoIssue = string(abi.encodePacked(response));
-            Author_UserRepoIssue = _Author_UserRepoIssue;
-        }
+            //string memory _Author_UserRepoIssue = string(abi.encodePacked(response));
+            //Author_UserRepoIssue = _Author_UserRepoIssue;
+        //}
 
         
 
         emit OCRResponse(requestId, response, err);
         //---------------------------------------
-        emit ResultCF(latestName);
+        //emit ResultCF(latestName);
     }
 
     /**
@@ -154,11 +191,14 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
         addExternalRequest(oracleAddress, requestId);
     }
 
-    function executeRequestFromEscrow(string[] calldata args) public onlyEscrow returns (bytes32) {
-        bytes memory secrets;
+    function executeRequestFromEscrow(string[] memory args) public returns (bytes32) {
+        string memory source = source_store;
+        bytes memory secrets = abi.encode(" ");
+        //string[] memory args = args_store;
+        //testvar = "TEST_STRING";
         uint32 gasLimit = 300000;
         return executeRequest(
-            source_store,
+            source,
             secrets,
             args,
             subscriptionId_store,
