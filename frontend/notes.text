@@ -1,0 +1,14 @@
+Cosas por Hacer:
+
+Frontend
+
+1.Autorizacion nextAuth para proteger rutas -->
+2.Filtro para enseñar solo los Issues que todavia no se ha creado bounty
+3.Developer page--> crear transaccion que junte el username con el wallet -->
+4.Developer page --> que se fetch los bountys ya creados -->
+
+5. DB para store los events. necesario para Developer -->
+
+Backend
+
+1.Chainlink function, en cada escrow.

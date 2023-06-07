@@ -1,73 +1,35 @@
-import '../styles/globals.css'
-import '@rainbow-me/rainbowkit/styles.css'
-
-import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit'
-import { configureChains, createClient, useAccount, WagmiConfig } from 'wagmi'
-import {
-  mainnet,
-  polygon,
-  optimism,
-  arbitrum,
-  goerli,
-  polygonMumbai,
-  optimismGoerli,
-  arbitrumGoerli,
-  polygonZkEvm,
-  polygonZkEvmTestnet,
-} from 'wagmi/chains'
-import { alchemyProvider } from 'wagmi/providers/alchemy'
-import { publicProvider } from 'wagmi/providers/public'
-import MainLayout from '../layout/mainLayout'
+import { NotificationProvider } from "web3uikit";
+import { MoralisProvider } from "react-moralis";
 import { useRouter } from 'next/router'
 
-const { chains, provider } = configureChains(
-  [
-    mainnet,
-    goerli,
-    polygon,
-    polygonMumbai,
-    optimism,
-    optimismGoerli,
-    arbitrum,
-    arbitrumGoerli,
-    polygonZkEvm,
-    polygonZkEvmTestnet,
-  ],
-  [alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }), publicProvider()]
-)
+//Initializar Apollo
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 
-const { connectors } = getDefaultWallets({
-  appName: 'My Alchemy DApp',
-  chains,
+import '../styles/globals.css'
+import MainLayout from '../layout/mainLayout'
+
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  uri:"https://api.studio.thegraph.com/query/45112/hackaton-auspain-v2/version/latest",
 })
 
-const wagmiClient = createClient({
-  autoConnect: true,
-  connectors,
-  provider,
-})
 
-export { WagmiConfig, RainbowKitProvider }
 
-const MyApp = ({ Component, pageProps }) => {
+const MyApp = ({ Component, pageProps, session }) => {
   const router = useRouter()
-  const account = useAccount({
-    onConnect({ address, connector, isReconnected }) {
-      if (!isReconnected) router.reload()
-    },
-  })
+
   return (
-    <WagmiConfig client={wagmiClient}>
-      <RainbowKitProvider
-        modalSize="compact"
-        initialChain={process.env.NEXT_PUBLIC_DEFAULT_CHAIN}
-        chains={chains}
-      >
+    
+  <MoralisProvider initializeOnMount={false}>
+    <ApolloProvider client={client}>
         <MainLayout>
+        <NotificationProvider>
           <Component {...pageProps} />
+          </NotificationProvider>
         </MainLayout>
-      </RainbowKitProvider>
-    </WagmiConfig>
+        </ApolloProvider>
+    </MoralisProvider>
+    
   )
 }
 

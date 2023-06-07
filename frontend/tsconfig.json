@@ -23,7 +23,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx"
-  ],
+, "components/navigation/formForData.jsx", "components/navigation/navbar.js"  ],
   "exclude": [
     "node_modules",
     "package-lock.json",

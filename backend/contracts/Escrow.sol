@@ -1,7 +1,8 @@
-// SPDX-License-Identifier: MIT
+//SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 import "./FunctionsConsumerEscrow.sol"; 
+import "./Main.sol";
 
 contract Escrow {
     address public depositor;
@@ -17,6 +18,7 @@ contract Escrow {
     event Approved(uint256 balance);
 
     constructor(address _arbiter, address _consumerAddress, string memory _issueID, string memory _repo) payable {
+
         arbiter = _arbiter;
         issueID = _issueID;
         repo = _repo;
@@ -27,13 +29,16 @@ contract Escrow {
         amount = msg.value;
     }
 
-    function approve(address _beneficiary) public payable {
-        require(msg.sender == arbiter, "Only arbiter can approve");
+    function cancelEscrow(address _arbiter) public onlyMainContract {
+        (bool sent, ) = _arbiter.call{value: amount}("");
+        require(sent, "Failed to send Eth");
+    }
 
+    function approve(address _beneficiary) public payable onlyMainContract {
         isApproved = true;
         beneficiary = _beneficiary;
         (bool sent, ) = beneficiary.call{value: amount}("");
-        require(sent, "Failed to send Ether");
+        require(sent, "Failed to send Eth");
 
         emit Approved(amount);
     }
