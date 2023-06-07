@@ -21,9 +21,6 @@ export default function RepoOwner() {
   //Intializer useRouter()
   const router = useRouter();
 
-  //Intializer of next-auth/react session
-  const { data: session, status } = useSession();
-
   /**
    * @notice We get the input of the Form in the formData.owner
    * @notice We execute the fetcher function that we need to use the SWR librarie
@@ -92,25 +89,8 @@ export default function RepoOwner() {
   };
 
   /**
-   * @notice Useeffect to execute the singIn() from nextAuth
+   * @notice Useeffect to execute the checkIssueIdOnChain()
    */
-
-  useEffect(() => {
-    if (status === "loading") {
-      return; // Still loading session data, do nothing
-    }
-
-    if (!session) {
-      // User is not signed in, show sign-in button
-      signIn();
-    } else if (session && router.query.redirected) {
-      // User is signed in and was redirected from the sign-in page
-      const { redirected } = router.query;
-      router.push(redirected); // Redirect back to the original page
-    }
-  }, [session, status, router]);
-  //END
-
   useEffect(() => {
     checkIssueIdOnChain();
   }, [data]);
@@ -146,46 +126,54 @@ export default function RepoOwner() {
       <div className="flex justify-center items-start mt-[10px] sm:mt-[20px]">
         {!showForm && (
           <div className="w-[400px] sm:w-[800px]">
-            {data && data.filteredIssues ? (
-              <div className="">
-                <div>
-                  <h2 className="line text-white font-bold mb-20">
-                    Your issues avalaible <br></br> to create a Bounty
+            {data ? (
+              data.filteredIssues.length > 0 ? (
+                <div className="">
+                  <div>
+                    <h2 className="line text-white font-bold mb-20">
+                      Your issues available <br></br> to create a Bounty
+                    </h2>
+                  </div>
+                  {data.filteredIssues.map((item) => {
+                    return item.issuesWithDetails.map((issue) => {
+                      const isIssueIdIncluded = registeredIssuesIds.includes(
+                        issue.issueId.toString()
+                      );
+                      console.log(isIssueIdIncluded);
+                      console.log(issue.issueId);
+
+                      return (
+                        <div className=" p-5" key={issue.issueId}>
+                          <BountyModal
+                            esVisible={showModal}
+                            onClose={hideModal}
+                            name={formData.name}
+                            id={formData.id}
+                            issueUrl={formData.issueUrl}
+                          />
+                          <CardCustom
+                            title={issue.title}
+                            id={issue.issueId}
+                            name={issue.name}
+                            issueUrl={issue.issueUrl}
+                            avatar={issue.avatar}
+                            repo={issue.repo}
+                            description={issue.description}
+                            isIssueIdIncluded={isIssueIdIncluded}
+                            handleClick={handleClick}
+                          />
+                        </div>
+                      );
+                    });
+                  })}
+                </div>
+              ) : (
+                <div className="mt-[80px] transition ease-out duration-500  hover:scale-105  p-3 flex-row sm:flex justify-center bg-[#f2f6ff] hover:bg-slate-200 h-fit rounded-lg border-solid border-lilaSuave border-4">
+                  <h2 className="text-2xl text-lila font-semibold">
+                    No Issues found
                   </h2>
                 </div>
-                {data.filteredIssues.map((item) => {
-                  return item.issuesWithDetails.map((issue) => {
-                    const isIssueIdIncluded = registeredIssuesIds.includes(
-                      issue.issueId.toString()
-                    );
-                    console.log(isIssueIdIncluded);
-                    console.log(issue.issueId);
-
-                    return (
-                      <div className="p-5" key={issue.issueId}>
-                        <BountyModal
-                          esVisible={showModal}
-                          onClose={hideModal}
-                          name={formData.name}
-                          id={formData.id}
-                          issueUrl={formData.issueUrl}
-                        />
-                        <CardCustom
-                          title={issue.title}
-                          id={issue.issueId}
-                          name={issue.name}
-                          issueUrl={issue.issueUrl}
-                          avatar={issue.avatar}
-                          repo={issue.repo}
-                          description={issue.description}
-                          isIssueIdIncluded={isIssueIdIncluded}
-                          handleClick={handleClick}
-                        ></CardCustom>
-                      </div>
-                    );
-                  });
-                })}
-              </div>
+              )
             ) : (
               <div className="">
                 <Skeleton theme="image" />

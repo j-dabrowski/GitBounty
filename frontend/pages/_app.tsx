@@ -1,7 +1,9 @@
 import { NotificationProvider } from "web3uikit";
 import { MoralisProvider } from "react-moralis";
-import { useRouter } from "next/router";
-import { SessionProvider } from "next-auth/react";
+
+import { useRouter } from 'next/router'
+
+
 //Initializar Apollo
 import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 
@@ -17,18 +19,19 @@ const MyApp = ({ Component, pageProps, session }) => {
   const router = useRouter();
 
   return (
-    <SessionProvider session={session}>
-      <MoralisProvider initializeOnMount={false}>
-        <ApolloProvider client={client}>
-          <MainLayout>
-            <NotificationProvider>
-              <Component {...pageProps} />
-            </NotificationProvider>
-          </MainLayout>
+    
+  <MoralisProvider initializeOnMount={false}>
+    <ApolloProvider client={client}>
+        <MainLayout>
+        <NotificationProvider>
+          <Component {...pageProps} />
+          </NotificationProvider>
+        </MainLayout>
         </ApolloProvider>
-      </MoralisProvider>
-    </SessionProvider>
-  );
-};
+    </MoralisProvider>
+    
+  )
+}
+
 
 export default MyApp;

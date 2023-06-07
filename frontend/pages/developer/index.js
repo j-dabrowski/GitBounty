@@ -1,6 +1,5 @@
 import React, { Fragment } from "react";
 import { ethers } from "ethers";
-import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import GET_ACTIVE_ESCROW from "../../constanst/subGraphQueries";
@@ -13,8 +12,6 @@ import BountiesActive from "../../components/bounties-active";
 
 export default function Developer() {
   const [isRegistered, setIsRegistered] = useState(false);
-  //Intializer of next-auth/react session
-  const { data: session, status } = useSession();
 
   //Initialized router from useRouter
   const router = useRouter();
@@ -78,8 +75,8 @@ export default function Developer() {
             </div>
             <div className=" h-screen">
               {loading || !data ? (
-                <div>Loading...</div>
-              ) : (
+                <div className="text-white">Loading...</div>
+              ) : !loading && data && data.activeEscrows.length > 0 ? (
                 data.activeEscrows.map((issue) => {
                   console.log(issue.attributes);
                   const {
@@ -106,6 +103,12 @@ export default function Developer() {
                     </div>
                   );
                 })
+              ) : (
+                <div className=" transition ease-out duration-500  hover:scale-105  p-3 flex-row sm:flex jussm:justify-between bg-[#f2f6ff] hover:bg-slate-200 h-fit rounded-lg border-solid border-lilaSuave border-4">
+                  <h2 className="text-xl text-lila font-semibold">
+                    No Bounties avalaible
+                  </h2>
+                </div>
               )}
             </div>
           </div>

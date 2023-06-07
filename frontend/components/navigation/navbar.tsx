@@ -1,22 +1,15 @@
 import React, { useState } from 'react';
 import { ConnectButton } from "web3uikit";
-import { useSession, signIn, signOut, getSession } from "next-auth/react";
 import Link from "next/link";
+import {  useMoralis } from "react-moralis";
 
 
 function Navbar() {
  const [isOpen, setIsOpen] = useState(false);
- 
- 
-  const { data: session, status } = useSession();
-  /**
-   * @Notice Function onClick of button singOut
-   */
 
-  function handleOnClick() {
-    signOut({ callbackUrl: "/" });
-  }
-  //END
+ //Initilizer of moralis
+ const { isWeb3Enabled } = useMoralis();
+ 
 
  return (
    <nav className="flex items-center justify-between flex-wrap p-6">
@@ -50,24 +43,10 @@ function Navbar() {
        className={`w-full block flex-grow lg:flex lg:items-center lg:w-auto ${isOpen ? "block" : "hidden"}`}
      >
        <div className="text-sm lg:flex-grow flex-col items-center">
-       {session ? (
-          <div className='block w-40 sm:w-fit  mt-4 lg:inline-block lg:mt-0 mr-4 py-2 px-4 bg-lila hover:bg-lilaSuave text-white z-10 font-bold border-b-4 border-lilaSuave hover:border-lila rounded'>
-            <button onClick={handleOnClick}>
-              {status === "authenticated" ? "Sign out" : null}
-            </button>
-          </div>
-        ) : (
-          ""
-        )}
-
-    {session ? (
-          <div className=' w-40 sm:w-fit block mt-4 lg:inline-block lg:mt-0 mr-4 py-2 px-4 bg-lila hover:bg-lilaSuave text-white z-10 font-bold border-b-4 border-lilaSuave hover:border-lila rounded'>
+        {isWeb3Enabled ? (<div className='ml-[25px] sm:ml-[150px] mb- w-40 sm:w-fit block mt-4 lg:inline-block lg:mt-0 mr-4 py-2 px-4 bg-lila hover:bg-lilaSuave text-white z-10 font-bold border-b-4 border-lilaSuave hover:border-lila rounded'>
             <Link href={"/owner-account"}> My Bounties</Link>
-          </div>
-        ) : (
-          ""
-        )}
-      
+          </div>) : ("")}
+          
       </div>
        <div className='w-5 sm:w-fit'>
           <ConnectButton></ConnectButton>
