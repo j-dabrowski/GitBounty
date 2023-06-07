@@ -11,8 +11,8 @@ contract Main {
         address escrowContract;
         string ownerUserName;
         uint256 issueId;
-        uint256 repo;
-        uint256 url;
+        string repo;
+        string url;
     }
 
     //Struct for each new Developer who wants to use our Service
@@ -36,8 +36,8 @@ contract Main {
         uint256 amount,
         string ownerUserName,
         uint256 issueId,
-        uint256 repo,
-        uint256 url
+        string repo,
+        string url
     );
     event EscrowClosed(address indexed escrowContract, uint256 issueId);
     event EscrowClosedAfterApprove(
@@ -78,8 +78,8 @@ contract Main {
         address _arbiter,
         string memory _ownerUserName,
         uint256 _issueId,
-        uint256 _repo,
-        uint256 _url
+        string memory _repo,
+        string memory _url
     ) public payable {
         Escrow newEscrow = new Escrow{value: msg.value}(_arbiter);
 
