@@ -8,7 +8,7 @@ export default function HeroComponent(){
 
     return(
         
-      <div className="min-h-[90vh]">
+      <div className="min-h-[55vh] sm:min-h-[90vh]">
       <div className=" flex justify-center items-center p-5">
       <h1 className=" text-[13vw] text-center md:text-[100px] leading-1 select-none tracking-tightest font-extrabold">
   <span data-content="Create Bounties." className="relative block before:content-[attr(data-content)] before:w-full before:z-0 before:block before:absolute before:top-0 before:px-2 before:bottom-0 before:left-0 before:text-center before:text-[#0f1624] before:animate-gradient-background-1">

@@ -15,7 +15,7 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       <main className="flex-col justify-center">
-        <div className="flex justify-center">
+        <div className="flex justify-center mb-[70px]">
           {isWeb3Enabled ? (
             <div className="mt-10">
               <div className="flex justify-center items-center mb-20">

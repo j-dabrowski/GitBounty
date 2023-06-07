@@ -5,7 +5,7 @@ export default function ExplanationComp() {
   return (
     <div className="flex flex-col sm:flex-row mt-10  p-3 min-h-[95vh]">
       <div className="w-[100%] sm:w-[50%] flex justify-center items-center p-5">
-        <p className=" bg-black mb-[30px] sm:mb-[0px] text-gray-100 mt-[50px] text-[13vw] text-center md:text-[60px] leading-none select-none  font-extrabold ">
+        <p className="  mb-[30px] sm:mb-[0px] text-gray-100 mt-[50px] text-[13vw] text-center md:text-[60px] leading-none select-none  font-extrabold ">
           What does our service?
         </p>
       </div>
