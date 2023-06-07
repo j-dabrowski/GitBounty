@@ -11,6 +11,8 @@ contract Main {
         address escrowContract;
         string ownerUserName;
         uint256 issueId;
+        uint256 repo;
+        uint256 url;
     }
 
     //Struct for each new Developer who wants to use our Service
@@ -33,7 +35,9 @@ contract Main {
         address indexed depositor,
         uint256 amount,
         string ownerUserName,
-        uint256 issueId
+        uint256 issueId,
+        uint256 repo,
+        uint256 url
     );
     event EscrowClosed(address indexed escrowContract, uint256 issueId);
     event EscrowClosedAfterApprove(
@@ -73,11 +77,21 @@ contract Main {
     function createEscrow(
         address _arbiter,
         string memory _ownerUserName,
-        uint256 _issueId
+        uint256 _issueId,
+        uint256 _repo,
+        uint256 _url
     ) public payable {
         Escrow newEscrow = new Escrow{value: msg.value}(_arbiter);
 
-        Escrows.push(Escrow_info(address(newEscrow), _ownerUserName, _issueId));
+        Escrows.push(
+            Escrow_info(
+                address(newEscrow),
+                _ownerUserName,
+                _issueId,
+                _repo,
+                _url
+            )
+        );
 
         emit EscrowCreated(
             address(newEscrow),
@@ -85,7 +99,9 @@ contract Main {
             msg.sender,
             msg.value,
             _ownerUserName,
-            _issueId
+            _issueId,
+            _repo,
+            _url
         );
     }
 
