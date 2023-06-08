@@ -12,6 +12,7 @@ contract Main {
         string ownerUserName;
         string issueId;
         string repo;
+        string url;
     }
 
     //Struct for each new Developer who wants to use our Service
@@ -28,7 +29,6 @@ contract Main {
 
     address public consumerAddress;
 
-
     //Event fired when a new Escrow/bounty is created
     event EscrowCreated(
         address indexed escrowContract,
@@ -37,7 +37,8 @@ contract Main {
         uint256 amount,
         string ownerUserName,
         string issueId,
-        string repo
+        string repo,
+        string url
     );
     event EscrowClosed(address indexed escrowContract, string issueId);
     event EscrowClosedAfterApprove(
@@ -48,6 +49,10 @@ contract Main {
     //Event fired when a new Developer signIn
     event NewDeveloper(address indexed developer, string loginName);
 
+    constructor(address escrowContractAddress) {
+        // Initialize the Escrow contract
+        escrowInitialized = Escrow(escrowContractAddress);
+    }
 
     function setEscrowAddress(address escrowContractAddress) internal {
         escrowInitialized = Escrow(escrowContractAddress);
@@ -74,14 +79,24 @@ contract Main {
         address _arbiter,
         string memory _ownerUserName,
         string memory _issueId,
-        string memory _repo
+        string memory _repo,
+        string memory _url
     ) public payable {
-        Escrow newEscrow = new Escrow{
-            value: msg.value
-        }(_arbiter, consumerAddress, _issueId, _repo);
+        Escrow newEscrow = new Escrow{value: msg.value}(
+            _arbiter,
+            consumerAddress,
+            _issueId,
+            _repo
+        );
 
         Escrows.push(
-            Escrow_info(address(newEscrow), _ownerUserName, _issueId, _repo)
+            Escrow_info(
+                address(newEscrow),
+                _ownerUserName,
+                _issueId,
+                _repo,
+                _url
+            )
         );
 
         EscrowExists[address(newEscrow)] = true;
@@ -93,16 +108,27 @@ contract Main {
             msg.value,
             _ownerUserName,
             _issueId,
-            _repo
+            _repo,
+            _url
         );
     }
 
-    function createEscrowPreset() public payable { // TESTING PURPOSES ONLY, REMOVE FOR PROD
-        Escrow newEscrow = new Escrow{
-            value: msg.value
-        }(address(0xa92370Db81cD337d1d1b7B07DA2839c2Fbf88d09), consumerAddress, "777", "notional");
+    function createEscrowPreset() public payable {
+        // TESTING PURPOSES ONLY, REMOVE FOR PROD
+        Escrow newEscrow = new Escrow{value: msg.value}(
+            address(0xa92370Db81cD337d1d1b7B07DA2839c2Fbf88d09),
+            consumerAddress,
+            "777",
+            "notional"
+        );
         Escrows.push(
-            Escrow_info(address(newEscrow), "testName", "777", "notional")
+            Escrow_info(
+                address(newEscrow),
+                "testName",
+                "777",
+                "notional",
+                "https://github.com/Chusynuk"
+            )
         );
 
         EscrowExists[address(newEscrow)] = true;
@@ -114,7 +140,8 @@ contract Main {
             msg.value,
             "testName",
             "777",
-            "notional"
+            "notional",
+            "https://github.com/Chusynuk/notional"
         );
     }
 
@@ -126,12 +153,14 @@ contract Main {
         return EscrowExists[_contractAddress];
     }
 
-    function EscrowsIsEmpty() public view returns (bool) { // TESTING PURPOSES ONLY, REMOVE FOR PROD
-        if(Escrows.length == 0) {
+    function EscrowsIsEmpty() public view returns (bool) {
+        // TESTING PURPOSES ONLY, REMOVE FOR PROD
+        if (Escrows.length == 0) {
             return true;
         }
         return false;
     }
+
     /**
      *
      * @param escrowContractAddress address from escrow contract that we want to delete
@@ -165,7 +194,7 @@ contract Main {
      * @param escrowContractAddress address of the escrow contract that we want to approve
      * @param beneficiary who get the money after approve
      */
-    function deleteEscrowArrayWhenApproved(
+    function ApproveEscrow(
         address escrowContractAddress,
         address beneficiary
     ) external returns (uint256) {

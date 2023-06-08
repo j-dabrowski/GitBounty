@@ -31,9 +31,9 @@ export default function Developer() {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       console.log(signer);
-      const contractAddress = "0x3b03C7A681BAa8d506FE2d540841f5c76e242697";
+      const contractAddress = "0x452fDfDEDf8b1F7Bc815d5E5433a768A7579fa6F";
       const user = await signer.getAddress();
-      console.log(user);
+      console.log(`Este es el user` + user);
 
       const contract = new ethers.Contract(contractAddress, abi, signer);
       const getDeveloperInArray = await contract.getDevelopers();

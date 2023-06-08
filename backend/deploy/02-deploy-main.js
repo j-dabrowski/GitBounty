@@ -18,7 +18,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
   const main = await deploy("Main", {
     from: deployer,
-    args: [],
+    args: ["0xe1C3252461D687e9beb75c9384A35e07B3C99978"],
     log: true,
     waitConfirmations: waitBlockConfirmations,
     gasPrice: 8000000000, // set gas price for Polygon
@@ -33,7 +33,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   ) {
     log("Verifying...");
 
-    await verify(main.address, []);
+    await verify(main.address, ["0xe1C3252461D687e9beb75c9384A35e07B3C99978"]);
   }
   console.log("----------------------------------------------------");
 };

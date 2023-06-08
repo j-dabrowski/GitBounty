@@ -1,4 +1,5 @@
-export default function CardCustom({title,
+export default function CardCustom({
+    title,
     id,
     name,
     issueUrl,
@@ -33,7 +34,7 @@ return(
                               ) : (
                                 <button
                                   onClick={() =>
-                                    handleClick(name,id,issueUrl)
+                                    handleClick(name,id, issueUrl ,repo)
                                   }
                                   className="bg-lila animate-pulse hover:bg-lilaSuave text-white font-bold py-2 px-4 border-b-4 border-lilaSuave hover:border-lila rounded"
                                 >

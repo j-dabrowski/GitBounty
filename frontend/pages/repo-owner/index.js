@@ -1,7 +1,6 @@
 import { Form, Skeleton } from "web3uikit";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/router";
 import { ethers } from "ethers";
 
@@ -50,9 +49,9 @@ export default function RepoOwner() {
   /**
    * @notice Function executed when we click on the button for each card
    */
-  const handleClick = (name, id, issueUrl) => {
+  const handleClick = (name, id, issueUrl, repo) => {
     setShowModal(true);
-    setFormData({ ...formData, name, id, issueUrl });
+    setFormData({ ...formData, name, id, issueUrl, repo });
   };
   //END
   /**
@@ -64,7 +63,7 @@ export default function RepoOwner() {
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       console.log(signer);
-      const contractAddress = "0x3b03C7A681BAa8d506FE2d540841f5c76e242697";
+      const contractAddress = "0x452fDfDEDf8b1F7Bc815d5E5433a768A7579fa6F";
 
       const contract = new ethers.Contract(contractAddress, abi, signer);
       const getIssueIdInArray = await contract.getEscrows();
@@ -89,8 +88,9 @@ export default function RepoOwner() {
   };
 
   /**
-   * @notice Useeffect to execute the checkIssueIdOnChain()
+   * @notice Useeffect to execute the singIn() from nextAuth
    */
+
   useEffect(() => {
     checkIssueIdOnChain();
   }, [data]);
@@ -140,7 +140,8 @@ export default function RepoOwner() {
                         issue.issueId.toString()
                       );
                       console.log(isIssueIdIncluded);
-                      console.log(issue.issueId);
+                      const Id = issue.issueId.toString();
+                      console.log(Id);
 
                       return (
                         <div className=" p-5" key={issue.issueId}>
@@ -150,10 +151,11 @@ export default function RepoOwner() {
                             name={formData.name}
                             id={formData.id}
                             issueUrl={formData.issueUrl}
+                            repo={formData.repo}
                           />
                           <CardCustom
                             title={issue.title}
-                            id={issue.issueId}
+                            id={Id}
                             name={issue.name}
                             issueUrl={issue.issueUrl}
                             avatar={issue.avatar}

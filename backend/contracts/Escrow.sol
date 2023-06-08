@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "./FunctionsConsumerEscrow.sol"; 
+import "./FunctionsConsumerEscrow.sol";
 import "./Main.sol";
 
 contract Escrow {
@@ -22,8 +22,12 @@ contract Escrow {
         _;
     }
 
-    constructor(address _arbiter, address _consumerAddress, string memory _issueID, string memory _repo) payable {
-
+    constructor(
+        address _arbiter,
+        address _consumerAddress,
+        string memory _issueID,
+        string memory _repo
+    ) payable {
         arbiter = _arbiter;
         issueID = _issueID;
         repo = _repo;
@@ -54,6 +58,4 @@ contract Escrow {
         args[1] = issueID;
         consumer.executeRequestFromEscrow(args);
     }
-
-
 }

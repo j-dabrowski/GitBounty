@@ -1,7 +1,6 @@
 import { useMoralis } from "react-moralis";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment } from "react";
 
 import HeroComponent from "../components/navigation/hero-component";
 import ExplanationComp from "../components/navigation/explanation-component";

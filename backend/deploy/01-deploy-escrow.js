@@ -15,8 +15,13 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     : VERIFICATION_BLOCK_CONFIRMATIONS;
 
   console.log("----------------------------------------------------");
-  const args = ["0x4C65cED1a185Ff79313F00A9C9D3f52D0dC7c4B2"];
-  const value = ethers.utils.parseEther("0.1");
+  const args = [
+    "0x4C65cED1a185Ff79313F00A9C9D3f52D0dC7c4B2",
+    "0x4B0c5eb9d76c9b99372064c74643ad910DCdF8d4",
+    "1234",
+    "notional",
+  ];
+  const value = ethers.utils.parseEther("0.01");
   const escrow = await deploy("Escrow", {
     from: deployer,
     args: args,

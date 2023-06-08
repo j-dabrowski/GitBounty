@@ -5,6 +5,7 @@ export default async function createBounty(
   arbiterAddress,
   ownerUserName,
   issueId,
+  repo,
   issueUrl,
   value
 ) {
@@ -23,7 +24,7 @@ export default async function createBounty(
   console.log("estoy trabajando");
   //EscrowFactory address
 
-  const contractAddress = "0x3b03C7A681BAa8d506FE2d540841f5c76e242697";
+  const contractAddress = "0x452fDfDEDf8b1F7Bc815d5E5433a768A7579fa6F";
 
   const contract = new ethers.Contract(contractAddress, abi, signer);
   console.log("estoy trabajando 2");
@@ -35,6 +36,7 @@ export default async function createBounty(
     arbiterAddress,
     ownerUserName,
     issueId,
+    repo,
     issueUrl,
     {
       value: valueInWei,

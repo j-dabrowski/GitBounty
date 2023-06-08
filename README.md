@@ -1,6 +1,6 @@
 # notional
 
-notional
+Setup for BackEnd -->
 
 setup secrets with env-enc:
 
@@ -14,7 +14,7 @@ POLYGON_MUMBAI_RPC_URL
 
 POLYGONSCAN_API_KEY
 
-Setup env. for FrontEnd :
+Setup env. for FrontEnd -->
 
 You need to create those:
 
@@ -23,7 +23,3 @@ GITHUB_TOKEN
 CLIENT_ID
 
 CLIENT_SECRET
-
-NEXTAUTH_URL=http://localhost:3000
-
-JWT_SECRET

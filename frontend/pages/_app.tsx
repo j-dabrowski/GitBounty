@@ -12,7 +12,7 @@ import MainLayout from "../layout/mainLayout";
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: "https://api.studio.thegraph.com/query/45112/hackaton-auspain-v2/version/latest",
+  uri: "https://api.studio.thegraph.com/query/45112/chainlink-hackathon-notional/version/latest",
 });
 
 const MyApp = ({ Component, pageProps, session }) => {

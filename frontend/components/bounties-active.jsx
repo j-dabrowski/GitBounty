@@ -6,7 +6,7 @@ export default function BountiesActive({url,arbiter,issueId,ownerUserName,escrow
   const limitedAddress = arbiter.slice(0, 5 ) + "..." + arbiter.slice(-4)
   console.log(url);
   const handleClick = ()=>{
-    window.location.href = url;
+    window.location.href = url
   }
     
     return(
