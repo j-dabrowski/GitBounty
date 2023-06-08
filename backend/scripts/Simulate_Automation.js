@@ -18,11 +18,11 @@ async function main() {
 
     await main.setConsumerAddress(consumerAddress);
 
-    //const escrow = await deploy_escrow(owner, main);
+    const escrow = await deploy_escrow(owner, main);
 
-    //await test_escrow(escrow);
+    await test_escrow(escrow);
 
-    //await test_consumer(consumer);
+    await test_consumer(consumer);
 
 
     await test_functions(consumer);
@@ -207,14 +207,25 @@ async function deploy_consumer(mainAddress) {
     const latestError1 = await consumer.latestError();
     console.log(latestError1);
     
-    const testvar1 = await consumer.testvar();
-    console.log("testvar", testvar1);
+    //const testvar1 = await consumer.testvar();
+    //console.log("testvar", testvar1);
 
+    const gasLimit = 300000; // Set your desired gas limit
 
     const args = ["notional", "19"];
-    //const result = await consumer.executeRequestFromEscrow(args)
-    const result = await consumer.executeRequest2()
-    const receipt = await result.wait(10);
+    //const result = await consumer.executeRequestFromEscrow(args);
+    //const result = await consumer.executeRequest2();
+    const result = await consumer.executeRequest3(args);
+    //const receipt = await result.wait(10);
+
+    // Specify the gas limit in the transaction options
+    const overrides = {
+      gasLimit: gasLimit
+    };
+    
+    await result.wait({ gasLimit: gasLimit });
+    
+
     //console.log(result);
     console.log("\n\n");
     console.log(receipt);
@@ -226,8 +237,8 @@ async function deploy_consumer(mainAddress) {
     const latestError2 = await consumer.latestError();
     console.log(latestError2);
 
-    const testvar2 = await consumer.testvar();
-    console.log("testvar", testvar2);
+    //const testvar2 = await consumer.testvar();
+    //console.log("testvar", testvar2);
 
 
     const Author_UserRepoIssue = await consumer.Author_UserRepoIssue();
@@ -237,7 +248,7 @@ async function deploy_consumer(mainAddress) {
 
   async function createSubscription(consumerAddress) {
     // 1 LINK is sufficient for this example
-    const linkAmount = "1";
+    const linkAmount = "5";
     // Set your consumer contract address. This contract will
     // be added as an approved consumer of the subscription.
     const consumer = consumerAddress;

@@ -17,6 +17,11 @@ contract Escrow {
 
     event Approved(uint256 balance);
 
+    modifier onlyMainContract() {
+        require(msg.sender == depositor, "Only Main contract can esceute");
+        _;
+    }
+
     constructor(address _arbiter, address _consumerAddress, string memory _issueID, string memory _repo) payable {
 
         arbiter = _arbiter;

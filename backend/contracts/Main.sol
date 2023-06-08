@@ -39,19 +39,15 @@ contract Main {
         string issueId,
         string repo
     );
-    event EscrowClosed(address indexed escrowContract, uint256 issueId);
+    event EscrowClosed(address indexed escrowContract, string issueId);
     event EscrowClosedAfterApprove(
         address indexed escrowContract,
-        uint256 issueId
+        string issueId
     );
 
     //Event fired when a new Developer signIn
     event NewDeveloper(address indexed developer, string loginName);
 
-    constructor(address escrowContractAddress) {
-        // Initialize the Escrow contract
-        escrowInitialized = Escrow(escrowContractAddress);
-    }
 
     function setEscrowAddress(address escrowContractAddress) internal {
         escrowInitialized = Escrow(escrowContractAddress);
@@ -135,7 +131,7 @@ contract Main {
             return true;
         }
         return false;
-
+    }
     /**
      *
      * @param escrowContractAddress address from escrow contract that we want to delete

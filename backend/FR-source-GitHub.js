@@ -85,7 +85,7 @@ for (let i = 0; i < mergedPulls.length; ++i) {
     console.log("commits_data commit_msg", commit_msg);
     console.log("commits_data author_username", author_username);
     //console.log("commits_data author_email", author_email);
-    console.log("userRepoIssue", `${username}/${repoName}/${issueId}`)
+    console.log("userRepoIssue", `${author_username}/${username}/${repoName}/${issueId}`)
     //return Buffer.concat([Functions.encodeString(author_username), Functions.encodeString(`${username}/${repoName}/${issueId}`)]);
     return Functions.encodeString(`${author_username}/${username}/${repoName}/${issueId}`);
   }

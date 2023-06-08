@@ -65,6 +65,7 @@ contract FunctionsConsumerEscrow is FunctionsClient, ConfirmedOwner {
         source_store = _source;
         depositor = msg.sender;
         amount = msg.value;
+        setOracle(oracle);
     }
 
     modifier onlyEscrow {
